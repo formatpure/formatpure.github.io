@@ -275,7 +275,61 @@
         <h1>FormatPure</h1>
         <p>Remove AI markdown symbols, fix weird spacing, and clean up messy copied text instantly.</p>
     </header>
+<!-- GLOBAL SEARCH BAR - Add this after your header -->
+<div style="max-width:460px;margin:10px auto;padding:0 12px;">
+<div style="position:relative;">
+<input id="globalSearch" type="text" placeholder="🔍 Search tools... (e.g. passport, pdf, image, cv)" 
+style="width:100%;padding:14px 16px 14px 42px;border-radius:14px;border:2px solid #00ff88;background:#151525;color:#fff;font-size:14px;outline:none;box-sizing:border-box;">
+<span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;">🔍</span>
+<div id="searchResults" style="position:absolute;top:52px;left:0;right:0;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;z-index:999;display:none;max-height:300px;overflow-y:auto;text-align:left;"></div>
+</div>
+</div>
 
+<script>
+const allTools = [
+ {name:"🪪 Passport Photo Maker", url:"pureid.html", keys:"passport photo id card a4 print cnic"},
+ {name:"📄 PDF to Image", url:"pdf-to-image.html", keys:"pdf image jpg png convert"},
+ {name:"🖼️ Image to PDF", url:"image-to-pdf.html", keys:"image pdf jpg convert"},
+ {name:"📝 CV Maker", url:"cv-maker.html", keys:"cv resume biodata job"},
+ {name:"✂️ Background Remover", url:"bg-remover.html", keys:"background remove white transparent"},
+ {name:"📏 Image Resizer", url:"image-resizer.html", keys:"resize image photo kb"},
+ {name:"🔗 QR Code Generator", url:"qr-maker.html", keys:"qr code whatsapp link"},
+ {name:"📝 Age Calculator", url:"age-calculator.html", keys:"age birthday calculator"},
+ {name:"🔤 Text to Speech", url:"text-to-speech.html", keys:"text voice speak audio"},
+ {name:"🪪 Pure Photo Lab", url:"purephoto.html", keys:"photo lab edit filter"},
+];
+
+const input = document.getElementById('globalSearch');
+const resultsBox = document.getElementById('searchResults');
+
+input.addEventListener('input', function(){
+ let q = this.value.toLowerCase().trim();
+ if(q.length < 1){ resultsBox.style.display='none'; return; }
+ let filtered = allTools.filter(t => t.name.toLowerCase().includes(q) || t.keys.includes(q));
+ if(filtered.length==0){
+   resultsBox.innerHTML = `<div style="padding:12px;color:#888;font-size:13px">No tool found for "${q}"</div>`;
+   resultsBox.style.display='block';
+   return;
+ }
+ let html = filtered.map(t => `<a href="${t.url}" style="display:block;padding:12px 14px;color:#fff;text-decoration:none;border-bottom:1px solid #2a2a4a;font-size:13px;">${t.name}</a>`).join('');
+ resultsBox.innerHTML = html;
+ resultsBox.style.display='block';
+});
+
+document.addEventListener('click', function(e){
+ if(!e.target.closest('#globalSearch') && !e.target.closest('#searchResults')){
+   resultsBox.style.display='none';
+ }
+});
+
+// Enter to go first result
+input.addEventListener('keydown', function(e){
+ if(e.key==='Enter'){
+   let first = resultsBox.querySelector('a');
+   if(first) window.location.href = first.href;
+ }
+});
+</script>
 
 <!-- font.html button create and link font html filr to index(Inside the Body) -->
 <a href="Fonts.html" class="launch-btn">
