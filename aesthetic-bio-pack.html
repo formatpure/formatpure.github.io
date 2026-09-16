@@ -1,101 +1,55 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aesthetic Bio Pack - Fonts, Emojis, Captions | FormatPure</title>
+<title>Aesthetic Bio Pack - Fixed</title>
 <style>
 body{margin:0;background:#070710;color:#fff;font-family:Arial;text-align:center}
-header{padding:14px;background:linear-gradient(90deg,#ff00cc,#3333ff);color:#fff;font-weight:900}
+header{padding:14px;background:linear-gradient(90deg,#ff00cc,#3333ff);font-weight:900}
 .box{background:#151525;padding:14px;border-radius:16px;margin:12px auto;max-width:460px;border:1px solid #2a2a4a}
 textarea{width:94%;padding:12px;border-radius:12px;border:2px solid #333;background:#0a0a18;color:#fff;font-size:16px}
-button{width:94%;padding:12px;margin:6px;border-radius:12px;border:none;font-weight:900;cursor:pointer}
-.btn-pink{background:linear-gradient(90deg,#ff00cc,#3333ff);color:#fff}
-.btn-dark{background:#222;color:#fff;border:1px solid #444;width:30%;font-size:11px}
+.main-btn{width:94%;padding:14px;margin:8px;border-radius:12px;border:none;font-weight:900;cursor:pointer;background:linear-gradient(90deg,#ff00cc,#3333ff);color:#fff;font-size:16px}
 .tab{display:flex;gap:6px;justify-content:center;margin:10px 0}
-.tab div{padding:8px 12px;background:#222;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #333}
+.tab div{padding:8px 10px;background:#222;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid #333}
 .tab div.active{background:#ff00cc;color:#fff;font-weight:900}
-.result{background:#0a0a18;padding:12px;border-radius:12px;margin:8px 0;text-align:left;font-size:14px;border:1px solid #2a2a4a;position:relative}
-.copy{position:absolute;right:8px;top:8px;background:#ff00cc;color:#fff;border:none;padding:4px 8px;border-radius:8px;font-size:10px;cursor:pointer}
+.result{background:#0a0a18;padding:14px 90px 14px 14px;border-radius:12px;margin:8px 0;text-align:left;font-size:15px;border:1px solid #2a2a4a;position:relative;color:#fff;min-height:20px;word-break:break-all}
+.copy-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:#ff00cc;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-size:11px;font-weight:900;cursor:pointer;width:auto !important}
 </style>
 </head><body>
 <header>✨ AESTHETIC BIO PACK<div style="font-size:11px">Fonts + Emoji + Captions - For Gen Z</div></header>
 
 <div class="box">
-<textarea id="input" placeholder="Type your name / bio here... e.g. Zoya"></textarea>
+<textarea id="input" placeholder="Type your name...">Abubakar</textarea>
 <div class="tab">
 <div class="active" id="tFont" onclick="setTab('font')">🔤 Fonts</div>
 <div id="tEmoji" onclick="setTab('emoji')">💖 Emoji Combo</div>
 <div id="tCaption" onclick="setTab('caption')">📝 Captions</div>
-<div id="tBio" onclick="setTab('bio')">👑 Bio Ideas</div>
+<div id="tBio" onclick="setTab('bio')">👑 Bio</div>
 </div>
-<button class="btn-pink" onclick="generate()">✨ Generate Aesthetic Pack</button>
+<button class="main-btn" onclick="generate()">✨ Generate Aesthetic Pack</button>
 <div id="out"></div>
 </div>
-
-<a href="index.html" style="color:#ff00cc;display:block;margin:15px;font-weight:900;text-decoration:none">🏠 Back Home</a>
 
 <script>
 let mode='font';
 function setTab(m){mode=m; document.querySelectorAll('.tab div').forEach(d=>d.classList.remove('active')); document.getElementById('t'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active'); generate();}
-
-const fonts = [
- t=>`𝓐𝓮𝓼𝓽𝓱𝓮𝓽𝓲𝓬 ${t}`,
- t=>`𝒜𝑒𝓈𝓉𝒽𝑒𝓉𝒾𝒸 ${t}`,
- t=>`𝔸𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔 ${t}`,
- t=>`Ａｅｓｔｈｅｔｉｃ ${t}`,
- t=>`ᴀᴇsᴛʜᴇᴛɪᴄ ${t}`,
- t=>`₳Ɇ₴₮ⱧɆ₮ł₵ ${t}`,
- t=>`🅰🅴🆂🆃🅷🅴🆃🅸🅲 ${t}`,
- t=>`𝙰𝚎𝚜𝚝𝚑𝚎𝚝𝚒𝚌 ${t}`,
- t=>`𝐀𝐞𝐬𝐭𝐡𝐞𝐭𝐢𝐜 ${t} ♡`,
- t=>`𝗔𝗲𝘀𝘁𝗵𝗲𝘁𝗶𝗰 ${t} ✨`,
-];
-
-const emojiCombos = [
- "💌 | {t} | 🕊️",
- "🤍 {t} 🎀",
- "🦢 {t} 🫧",
- "🌷 {t} ✨",
- "🍓 {t} 🧸",
- "🪞 {t} 💋",
- "🖇️ {t} 📎",
- "🌙 {t} ☁️",
- "🧿 {t} 🫶",
- "💭 {t} 🦋",
-];
-
-const captions = [
- "she's a 10 but {t} 💅",
- "in my {t} era ✨",
- "pov: you're {t} 🌷",
- "main character is {t} 🎀",
- "soft girl {t} 🧸",
- "not perfect but {t} 💌",
- "be your own {t} 🦢",
- "delulu is the solulu, I'm {t} 💭",
-];
-
-const bios = [
- "🎀 {t} | 18 | soft heart, sharp mind",
- "🌙 {t} • she/her • delulu 24/7",
- "💌 {t} ✨ | insta: {t}_aesthetic",
- "🕊️ {t} • not yours, never was",
- "🍓 {t} | pinterest girl irl",
- "🧸 {t} • crying in aesthetic",
- "🦋 {t} | main character energy",
- "🤍 {t} • private but not secret",
-];
+const fonts = [ t=>`𝓐 ${t}`, t=>`𝒜𝑒𝓈𝓉𝒽𝑒𝓉𝒾𝒸 ${t}`, t=>`𝔸𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔 ${t}`, t=>`Ａｅｓｔｈｅｔｉｃ ${t}`, t=>`ᴀᴇsᴛʜᴇᴛɪᴄ ${t}`, t=>`🅰🅴🆂🆃🅷🅴🆃🅸🅲 ${t}`, t=>`𝙰𝚎𝚜𝚝𝚑𝚎𝚝𝚒𝚌 ${t}`, t=>`𝐀𝐞𝐬𝐭𝐡𝐞𝐭𝐢𝐜 ${t} ♡`, t=>`𝗔𝗲𝘀𝘁𝗵𝗲𝘁𝗶𝗰 ${t} ✨`, t=>`Aesthetic ${t} 💅` ];
+const emojiCombos = ["💌 | {t} | 🕊️","🤍 {t} 🎀","🦢 {t} 🫧","🌷 {t} ✨","🍓 {t} 🧸","🪞 {t} 💋","🖇️ {t} 📎","🌙 {t} ☁️","🧿 {t} 🫶","💭 {t} 🦋"];
+const captions = ["she's a 10 but {t} 💅","in my {t} era ✨","pov: you're {t} 🌷","main character is {t} 🎀","soft girl {t} 🧸","not perfect but {t} 💌","be your own {t} 🦢","delulu is solulu, I'm {t} 💭"];
+const bios = ["🎀 {t} | 18 | soft heart, sharp mind","🌙 {t} • she/her • delulu 24/7","💌 {t} ✨ | insta: {t}_aesthetic","🕊️ {t} • not yours, never was","🍓 {t} | pinterest girl irl","🧸 {t} • crying in aesthetic","🦋 {t} | main character energy","🤍 {t} • private but not secret"];
 
 function generate(){
- let t=document.getElementById('input').value.trim() || "Zoya";
+ let t=document.getElementById('input').value.trim() || "Abubakar";
  let out=document.getElementById('out'); out.innerHTML='';
  let list=[];
  if(mode=='font') list=fonts.map(f=>f(t));
  if(mode=='emoji') list=emojiCombos.map(e=>e.replaceAll('{t}',t));
  if(mode=='caption') list=captions.map(c=>c.replaceAll('{t}',t));
- if(mode=='bio') list=bios.map(b=>b.replaceAll('{t}',t).toLowerCase());
-
+ if(mode=='bio') list=bios.map(b=>b.replaceAll('{t}',t.toLowerCase()));
  list.forEach(txt=>{
    let d=document.createElement('div'); d.className='result';
-   d.innerHTML=`${txt} <button class="copy" onclick="navigator.clipboard.writeText('${txt.replace(/'/g,"\\'")}'); this.innerText='Copied!'">Copy</button>`;
+   let span=document.createElement('span'); span.textContent=txt;
+   let btn=document.createElement('button'); btn.className='copy-btn'; btn.textContent='Copy';
+   btn.onclick=()=>{navigator.clipboard.writeText(txt); btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy',1000)};
+   d.appendChild(span); d.appendChild(btn);
    out.appendChild(d);
  });
 }
