@@ -14,6 +14,6 @@
 <script>
 let img=new Image();
 file.onchange=e=>{let r=new FileReader();r.onload=v=>{img.onload=draw;img.src=v.target.result};r.readAsDataURL(e.target.files[0])};
-function draw(){if(!img.src)return;let c=document.getElementById('c'),x=c.getContext('2d');c.width=img.width>600?600:img.width;c.height=c.width*img.height/img.width;x.drawImage(img,0,0,c.width,c.height);x.font='bold 36px Impact';x.textAlign='center';x.fillStyle='white';x.strokeStyle='black';x.lineWidth=6;let t=top.value.toUpperCase(),b=bot.value.toUpperCase();if(t){x.strokeText(t,c.width/2,45);x.fillText(t,c.width/2,45)}if(b){x.strokeText(b,c.width/2,c.height-20);x.fillText(b,c.width/2,c.height-20)}}
+ function draw(){if(!img.src)return;let c=document.getElementById('c'),x=c.getContext('2d');c.width=img.width>600?600:img.width;c.height=c.width*img.height/img.width;x.drawImage(img,0,0,c.width,c.height);x.font='bold 38px Impact,Arial';x.textAlign='center';x.fillStyle='white';x.strokeStyle='black';x.lineWidth=7;let tt=document.getElementById('t1').value.toUpperCase(),bb=document.getElementById('b1').value.toUpperCase();if(tt){x.strokeText(tt,c.width/2,50);x.fillText(tt,c.width/2,50)}if(bb){x.strokeText(bb,c.width/2,c.height-25);x.fillText(bb,c.width/2,c.height-25)}}
 function dl(){let a=document.createElement('a');a.download='meme.png';a.href=document.getElementById('c').toDataURL();a.click()}
 </script></body></html>
