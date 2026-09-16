@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Dice Roller - FormatPure</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Arial;background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;margin:0;padding:20px;min-height:100vh}
+.box{max-width:700px;margin:auto;background:#1e293bcc;backdrop-filter:blur(10px);padding:25px;border-radius:20px;border:1px solid #334155}
+h1{color:#38bdf8;margin:0}
+.sub{color:#94a3b8;margin:5px 0 20px}
+.controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:15px}
+label{font-size:12px;color:#94a3b8;display:block;text-align:left}
+select,input{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:16px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.preset{background:#334155;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:13px;border:0;color:#fff}
+.preset:hover{background:#38bdf8;color:#000}
+#rollBtn{background:linear-gradient(45deg,#38bdf8,#818cf8);color:#000;font-size:20px;font-weight:900;padding:16px;border:0;border-radius:14px;width:100%;cursor:pointer;margin:10px 0}
+#rollBtn:active{transform:scale(.98)}
+#diceBox{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:20px 0;min-height:80px}
+.die{width:65px;height:65px;background:#fff;color:#0f172a;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;animation:pop.3s}
+@keyframes pop{0%{transform:scale(0) rotate(180deg)}100%{transform:scale(1) rotate(0)}}
+#totalBox{background:#0f172a;border-radius:14px;padding:20px;margin:15px 0}
+#total{font-size:48px;font-weight:900;color:#38bdf8}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}
+.stat{background:#0f172a;padding:10px;border-radius:10px;font-size:13px}
+.stat b{display:block;font-size:18px;color:#fff}
+#hist{background:#0f172a;border-radius:10px;padding:15px;max-height:200px;overflow:auto;text-align:left;font-size:13px}
+.hist-row{padding:6px 0;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between}
+.btn2{background:#334155;color:#fff;padding:10px 16px;border-radius:10px;border:0;cursor:pointer;margin:5px}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎲 Pro Dice Roller</h1>
+<div class="sub">High-end tool for RPG, Board Games, Decisions - 100% Free</div>
+
+<div class="controls">
+<div><label>Dice Type</label><select id="sides"><option value="4">D4</option><option value="6" selected>D6 (Classic)</option><option value="8">D8</option><option value="10">D10</option><option value="12">D12</option><option value="20">D20 (D&D)</option><option value="100">D100 (%)</option></select></div>
+<div><label>How Many (1-20)</label><input type="number" id="count" value="2" min="1" max="20"></div>
+<div><label>Modifier (+/-)</label><input type="number" id="mod" value="0"></div>
+</div>
+
+<div class="presets">
+<button class="preset" onclick="setP(6,1,0)">D6</button>
+<button class="preset" onclick="setP(20,1,0)">D20</button>
+<button class="preset" onclick="setP(6,2,0)">2x D6</button>
+<button class="preset" onclick="setP(20,1,5)">D20+5</button>
+<button class="preset" onclick="setP(8,3,2)">3x D8+2</button>
+<button class="preset" onclick="setP(100,1,0)">D100</button>
+<button class="preset" onclick="setP(6,1,0);coin()">🪙 Coin Flip</button>
+<button class="preset" onclick="yesNo()">🤔 Yes/No</button>
+</div>
+
+<button id="rollBtn" onclick="rollPro()">🎲 ROLL</button>
+
+<div id="diceBox"></div>
+
+<div id="totalBox">
+<div style="font-size:12px;color:#94a3b8">TOTAL</div>
+<div id="total">-</div>
+<div id="breakdown" style="color:#94a3b8;font-size:14px"></div>
+</div>
+
+<div class="stats">
+<div class="stat"><b id="s-high">-</b>Highest</div>
+<div class="stat"><b id="s-low">-</b>Lowest</div>
+<div class="stat"><b id="s-avg">-</b>Average</div>
+<div class="stat"><b id="s-count">0</b>Rolls</div>
+</div>
+
+<div style="margin:15px 0">
+<button class="btn2" onclick="copyR()">📋 Copy</button>
+<button class="btn2" onclick="clearH()">🗑️ Clear History</button>
+<button class="btn2" onclick="toggleSound()">🔊 Sound: <span id="snd">On</span></button>
+</div>
+
+<h3 style="text-align:left">History</h3>
+<div id="hist"><div style="color:#64748b">No rolls yet</div></div>
+
+<br><a href="index.html" style="color:#38bdf8">← Back to FormatPure</a>
+</div>
+
+<script>
+let soundOn=true, rollCount=0;
+function setP(s,c,m){document.getElementById('sides').value=s;document.getElementById('count').value=c;document.getElementById('mod').value=m;rollPro();}
+function toggleSound(){soundOn=!soundOn;document.getElementById('snd').textContent=soundOn?'On':'Off';}
+function playTick(){if(!soundOn)return;try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=600+Math.random()*400;o.type='square';g.gain.setValueAtTime(0.1,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1);o.start();o.stop(ctx.currentTime+0.1);}catch(e){}}
+function cryptoRand(max){const a=new Uint32Array(1);crypto.getRandomValues(a);return (a[0]%max)+1;}
+function rollPro(){
+ const sides=parseInt(document.getElementById('sides').value);
+ const count=Math.min(20,Math.max(1,parseInt(document.getElementById('count').value)||1));
+ const mod=parseInt(document.getElementById('mod').value)||0;
+ playTick();
+ let rolls=[];
+ for(let i=0;i<count;i++) rolls.push(cryptoRand(sides));
+ let sum=rolls.reduce((a,b)=>a+b,0);
+ let total=sum+mod;
+ // animate
+ const box=document.getElementById('diceBox'); box.innerHTML='';
+ rolls.forEach((r,i)=>{
+  setTimeout(()=>{const d=document.createElement('div');d.className='die';d.textContent=r;box.appendChild(d);playTick();},i*80);
+ });
+ setTimeout(()=>{
+  document.getElementById('total').textContent=total;
+  document.getElementById('breakdown').textContent=`${rolls.join(' + ')}${mod?` + (${mod})`:''} = ${total} • D${sides} x${count}`;
+  document.getElementById('s-high').textContent=Math.max(...rolls);
+  document.getElementById('s-low').textContent=Math.min(...rolls);
+  document.getElementById('s-avg').textContent=(sum/count).toFixed(1);
+  rollCount++; document.getElementById('s-count').textContent=rollCount;
+  const h=document.getElementById('hist');
+  if(rollCount==1) h.innerHTML='';
+  h.innerHTML=`<div class="hist-row"><span>D${sides} x${count} [${rolls.join(',')}] ${mod?' +'+mod:''}</span><b>${total}</b></div>`+h.innerHTML;
+  window.lastRoll=`Rolled D${sides} x${count}: ${rolls.join(', ')} = ${total}`;
+ },count*80+100);
+}
+function coin(){const r=cryptoRand(2);document.getElementById('total').textContent=r==1?'Heads 🪙':'Tails 🪙';document.getElementById('breakdown').textContent='Coin flip result';document.getElementById('diceBox').innerHTML=`<div class="die" style="width:100px">${r==1?'👑':'🔄'}</div>`;}
+function yesNo(){const r=cryptoRand(2);document.getElementById('total').textContent=r==1?'YES ✅':'NO ❌';document.getElementById('breakdown').textContent='Decision maker';}
+function copyR(){if(!window.lastRoll) return alert('Roll first');navigator.clipboard.writeText(window.lastRoll);alert('Copied!');}
+function clearH(){document.getElementById('hist').innerHTML='<div style="color:#64748b">No rolls yet</div>';rollCount=0;document.getElementById('s-count').textContent='0';}
+document.addEventListener('keydown',e=>{if(e.code=='Space'){e.preventDefault();rollPro();}});
+</script>
+</body>
+</html>
