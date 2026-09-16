@@ -40,7 +40,10 @@ canvas{background:#000;border-radius:10px;width:100%;max-width:340px;border:2px 
 <button class="btn-dark" onclick="moveX(-20)">⬅️ Left</button>
 <button class="btn-dark" onclick="moveX(20)">➡️ Right</button>
 </div>
-
+<label style="display:block;margin:12px 0;background:#222;padding:12px;border-radius:10px;font-size:12px;border:1px solid #00ff88">
+<input type="checkbox" id="shirtToggle" checked onchange="drawCrop()"> 👔 Add Formal White Shirt + Tie (For Job / Passport)
+</label>
+<p style="font-size:10px;color:#ffde7d">💡 Your photo is shirtless - Tick this to add shirt</p>
 <h3>2. Background</h3>
 <div class="grid">
 <div class="opt active" id="bgWhite" onclick="setBG('white')">✅ White BG (For Form)</div>
@@ -70,72 +73,73 @@ canvas{background:#000;border-radius:10px;width:100%;max-width:340px;border:2px 
 <a href="index.html" style="color:#00ff88;display:block;margin:20px;font-weight:900;text-decoration:none">🏠 Back Home</a>
 
 <script>
-let img=null, scale=1, offsetX=0, offsetY=0, bgMode='white', sheetCount=12;
-const cropC=document.getElementById('cropCanvas'), ctx=cropC.getContext('2d');
-const sheetC=document.getElementById('sheetCanvas'), sctx=sheetC.getContext('2d');
-
-fileInput.addEventListener('change', e=>{
- let f=e.target.files[0]; if(!f)return;
- let r=new FileReader(); r.onload=ev=>{
-  let i=new Image(); i.onload=()=>{img=i; scale=1; offsetX=0; offsetY=0; drawCrop();}; i.src=ev.target.result;
- }; r.readAsDataURL(f);
-});
-
+// FIXED FUNCTIONS - Replace old ones
 function drawCrop(){
  if(!img)return;
  ctx.clearRect(0,0,cropC.width,cropC.height);
- // white bg
- if(bgMode=='white'){ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,cropC.width,cropC.height);}
+ // REAL white background clean
+ ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,cropC.width,cropC.height);
+ 
  let zoom=parseInt(document.getElementById('zoomSlider').value)/100;
  let iw=img.width, ih=img.height;
  let baseScale=Math.max(cropC.width/iw, cropC.height/ih);
- let finalScale=baseScale*zoom*scale;
+ let finalScale=baseScale*zoom;
  let w=iw*finalScale, h=ih*finalScale;
  let x=(cropC.width-w)/2+offsetX, y=(cropC.height-h)/2+offsetY;
+ 
+ // Draw image with soft edges for clean white
+ ctx.save();
+ ctx.shadowColor='rgba(255,255,255,1)';
+ ctx.shadowBlur=8;
  ctx.drawImage(img,x,y,w,h);
- // face guide oval
- ctx.strokeStyle='rgba(0,255,136,0.4)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
- ctx.beginPath(); ctx.ellipse(cropC.width/2, cropC.height/2.2, cropC.width*0.32, cropC.height*0.32, 0,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+ ctx.restore();
+ 
+ // Draw shirt overlay if enabled
+ if(document.getElementById('shirtToggle') && document.getElementById('shirtToggle').checked){
+   // Simple formal collar
+   ctx.fillStyle='#ffffff'; ctx.fillRect(cropC.width*0.15, cropC.height*0.65, cropC.width*0.7, cropC.height*0.35);
+   ctx.fillStyle='#1a1a1a'; ctx.fillRect(cropC.width*0.42, cropC.height*0.68, cropC.width*0.16, cropC.height*0.25); // tie
+   ctx.fillStyle='#f0f0f0';
+   ctx.beginPath(); ctx.moveTo(cropC.width*0.30, cropC.height*0.68); ctx.lineTo(cropC.width*0.42, cropC.height*0.68); ctx.lineTo(cropC.width*0.38, cropC.height*0.80); ctx.fill();
+   ctx.beginPath(); ctx.moveTo(cropC.width*0.70, cropC.height*0.68); ctx.lineTo(cropC.width*0.58, cropC.height*0.68); ctx.lineTo(cropC.width*0.62, cropC.height*0.80); ctx.fill();
+ }
+
+ // Guide oval - ONLY show in preview canvas, NOT on export - so draw after but we will hide for export
+ if(window.showGuide !== false){
+   ctx.strokeStyle='rgba(0,255,136,0.35)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+   ctx.beginPath(); ctx.ellipse(cropC.width/2, cropC.height/2.15, cropC.width*0.30, cropC.height*0.30, 0,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+ }
 }
-function moveX(v){offsetX+=v; drawCrop()}
-function moveY(v){offsetY+=v; drawCrop()}
-function setBG(m){
- bgMode=m;
- document.getElementById('bgWhite').classList.toggle('active',m=='white');
- document.getElementById('bgOrig').classList.toggle('active',m=='orig');
- drawCrop();
-}
-function setSheet(n){
- sheetCount=n;
- document.querySelectorAll('.grid.opt').forEach(el=>el.classList.remove('active'));
- document.getElementById('s'+n).classList.add('active');
-}
+
 function makeSheet(){
- if(!img){alert('First upload photo!'); return;}
+ if(!img){alert('First upload!'); return;}
+ // Create clean passport WITHOUT guide
+ window.showGuide = false; drawCrop();
+ 
  sctx.fillStyle='#ffffff'; sctx.fillRect(0,0,sheetC.width,sheetC.height);
- let cols, rows;
- if(sheetCount==1){cols=1;rows=1} else if(sheetCount==8){cols=2;rows=4} else if(sheetCount==12){cols=3;rows=4} else {cols=4;rows=5}
- let pw=Math.floor((sheetC.width-40)/cols), ph=Math.floor(pw*531/413);
- let gap=12;
+ let cols=3, rows=4; if(sheetCount==1){cols=1;rows=1} else if(sheetCount==8){cols=2;rows=4} else if(sheetCount==20){cols=4;rows=5}
+ let pw=300, ph=Math.floor(pw*531/413), gap=18;
  let startX=(sheetC.width-(cols*pw+(cols-1)*gap))/2;
- let startY=20;
- // create temp small passport image
+ let startY=30;
+ 
  let temp=document.createElement('canvas'); temp.width=413; temp.height=531;
- let tctx=temp.getContext('2d'); tctx.drawImage(cropC,0,0);
+ let tctx=temp.getContext('2d'); 
+ // Copy CLEAN image without guide
+ tctx.fillStyle='#fff'; tctx.fillRect(0,0,413,531);
+ tctx.drawImage(cropC,0,0);
+
  for(let r=0;r<rows;r++){
   for(let c=0;c<cols;c++){
    if(r*cols+c>=sheetCount)break;
    let x=startX+c*(pw+gap), y=startY+r*(ph+gap);
    sctx.drawImage(temp,x,y,pw,ph);
-   sctx.strokeStyle='#e0e0e0'; sctx.lineWidth=1; sctx.strokeRect(x,y,pw,ph);
+   sctx.strokeStyle='#ddd'; sctx.lineWidth=1; sctx.strokeRect(x,y,pw,ph);
   }
  }
- sctx.fillStyle='#000'; sctx.font='12px Arial'; sctx.fillText('Made with formatpure.github.io - FREE FOREVER',10,sheetC.height-10);
+ sctx.fillStyle='#000'; sctx.font='bold 14px Arial'; sctx.fillText('FormatPure.github.io - FREE FOREVER',12,sheetC.height-12);
+ 
+ // Restore guide for preview
+ window.showGuide = true; drawCrop();
 }
-function downloadCanvas(id,name){
- let c=document.getElementById(id); let a=document.createElement('a'); a.download=name; a.href=c.toDataURL('image/png'); a.click();
-}
-// initial white
-drawCrop();
-</script>
+ </script>
 </body></html>
