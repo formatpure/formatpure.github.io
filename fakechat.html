@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fake WhatsApp Chat Generator - Prank Your Friends</title>
+<style>
+body{margin:0;background:#0a0a0f;font-family:Arial;color:#fff;text-align:center}
+header{padding:16px;background:#25D366;color:#000;font-weight:bold;font-size:20px}
+.controls{background:#15151f;padding:12px;border-radius:14px;margin:10px auto;max-width:500px}
+input,select,button{width:92%;padding:12px;margin:5px;border-radius:10px;border:none}
+button{background:#25D366;color:#000;font-weight:bold;cursor:pointer}
+#chatBox{width:95%;max-width:400px;height:550px;margin:10px auto;background:#e5ddd5;position:relative;border-radius:12px;overflow:hidden;text-align:left}
+#chatHeader{background:#075E54;color:#fff;padding:10px;display:flex;align-items:center;gap:10px}
+#chatHeader img{width:40px;height:40px;border-radius:50%;background:#fff}
+#messages{padding:10px;height:430px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background-image:url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')}
+.msg{max-width:75%;padding:8px 10px;border-radius:8px;font-size:14px;position:relative;color:#000}
+.sent{background:#dcf8c6;align-self:flex-end}
+.received{background:#fff;align-self:flex-start}
+.time{font-size:10px;color:#666;float:right;margin-left:8px;margin-top:4px}
+.tick{color:#34B7F1}
+</style>
+</head>
+<body>
+<header>💬 Fake WhatsApp Chat - Prank PRO</header>
+
+<div class="controls">
+<input id="contactName" placeholder="Contact Name (e.g. Crush 😍)" value="Crush 😍" oninput="updateHeader()">
+<input id="status" placeholder="Status (e.g. online, typing...)" value="online" oninput="updateHeader()">
+<input type="file" id="avatar" accept="image/*">
+<select id="type"><option value="received">Received (White)</option><option value="sent">Sent (Green)</option></select>
+<input id="msgText" placeholder="Type message...">
+<button onclick="addMsg()">Add Message</button>
+<button onclick="clearChat()" style="background:#ff4d6d">Clear Chat</button>
+<button onclick="downloadChat()" style="background:#fff;color:#000">📸 Download as Screenshot</button>
+<p style="color:#999;font-size:12px">Tip: Add 4-5 messages then download. Looks 100% real!</p>
+</div>
+
+<div id="chatBox">
+<div id="chatHeader">
+<img id="headImg" src="https://i.pravatar.cc/100">
+<div><div id="headName" style="font-weight:bold">Crush 😍</div><div id="headStatus" style="font-size:12px;opacity:.8">online</div></div>
+</div>
+<div id="messages"></div>
+</div>
+
+<a href="vibelab.html" style="color:#38bdf8;display:block;margin:15px">← Back to VibeLab</a>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function updateHeader(){
+document.getElementById('headName').innerText=document.getElementById('contactName').value||'Crush 😍';
+document.getElementById('headStatus').innerText=document.getElementById('status').value||'online';
+}
+document.getElementById('avatar').onchange=e=>{
+let r=new FileReader();r.onload=()=>{document.getElementById('headImg').src=e.target.result};r.readAsDataURL(e.target.files[0])
+}
+function addMsg(){
+let text=document.getElementById('msgText').value;if(!text)return;
+let type=document.getElementById('type').value;
+let time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+let div=document.createElement('div');div.className='msg '+type;
+div.innerHTML=text+`<span class="time">${time} ${type=='sent'?'<span class=tick>✓✓</span>':''}</span>`;
+document.getElementById('messages').appendChild(div);
+document.getElementById('msgText').value='';document.getElementById('messages').scrollTop=9999;
+}
+function clearChat(){document.getElementById('messages').innerHTML='';}
+function downloadChat(){html2canvas(document.getElementById('chatBox')).then(c=>{let a=document.createElement('a');a.download='fake-whatsapp-chat.png';a.href=c.toDataURL();a.click()})}
+// demo messages
+setTimeout(()=>{msgText.value='hey, I miss you 😘';type.value='received';addMsg()},500)
+setTimeout(()=>{msgText.value='I miss you too ❤️';type.value='sent';addMsg()},1000)
+</script>
+</body>
+  </html>
