@@ -21,7 +21,7 @@ button{background:#00ff88;color:#000;font-weight:bold;cursor:pointer}
 .poster{background:linear-gradient(135deg,#ff006a,#7a00ff,#00d4ff);color:#fff;padding:20px;border-radius:14px;text-align:center}
 </style>
 </head><body>
-<header>💸 FLEXLAB <div class="sub">by formatpure.github.io - Global Viral Lab</div></header>
+<header> Soulmate😊<div class="sub">by formatpure.github.io - Global Viral Lab</div></header>
 
 <div class="tabs">
 
@@ -53,12 +53,7 @@ button{background:#00ff88;color:#000;font-weight:bold;cursor:pointer}
 <p style="color:#555;font-size:11px">Made with ❤️ by formatpure.github.io - All fakes are for fun only</p>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script>
-function show(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('active',k==i))}
-function dl(id){html2canvas(document.getElementById(id)).then(c=>{let a=document.createElement('a');a.download=id+'-formatpure.png';a.href=c.toDataURL();a.click()})}
-function makeBank(){document.getElementById('bankNameOut').innerText=document.getElementById('bankName').value+' • Available';document.getElementById('bankBalOut').innerText=document.getElementById('bankCurr').value.split(' ')[0]+' '+document.getElementById('bankBal').value}
-document.getElementById('imAvatar').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>document.getElementById('imImg').src=ev.target.result;r.readAsDataURL(f)})
-function addIm(){let t=imText.value;if(!t)return;let type=imType.value;let d=document.createElement('div');d.className='imsg-bubble '+(type=='blue'?'imsg-blue':'imsg-grey');d.innerText=t;imMsgs.appendChild(d);imText.value='';imMsgs.scrollTop=9999}
+
 // soulmate logic
 function makeSoul(){let n=sName.value||'You';let c=sCrush.value||'Crush';let age=22+Math.floor(Math.random()*6);let init=c.charAt(0).toUpperCase();let delu=85+Math.floor(Math.random()*15);document.getElementById('soulInit').innerText=init;document.getElementById('soulText').innerHTML=`${n} + ${c}<br>Marriage Age: ${age}<br>Delulu Level: ${delu}% 😭<br>Soulmate Vibes: UNMATCHED 💖<br><br>You will meet in ${Math.floor(Math.random()*8+1)} months!`}
 makeBank()
