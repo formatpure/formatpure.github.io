@@ -72,10 +72,33 @@ document.getElementById('messages').appendChild(div);
 document.getElementById('msgText').value='';document.getElementById('messages').scrollTop=9999;
 }
 function clearChat(){document.getElementById('messages').innerHTML='';}
-function downloadChat(){html2canvas(document.getElementById('chatBox')).then(c=>{let a=document.createElement('a');a.download='fake-whatsapp-chat.png';a.href=c.toDataURL();a.click()})}
-// demo messages
-setTimeout(()=>{msgText.value='hey, I miss you 😘';type.value='received';addMsg()},500)
-setTimeout(()=>{msgText.value='I miss you too ❤️';type.value='sent';addMsg()},1000)
+function downloadChat(){
+  html2canvas(document.getElementById('chatBox'), {scale:2}).then(canvas => {
+    const ctx = canvas.getContext('2d');
+    
+    // Footer watermark - 100% safe for 10 years
+    ctx.fillStyle = "rgba(0,0,0,0.8)";
+    ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("FAKE CHAT - FormatPure.github.io - For Fun Only", canvas.width/2, canvas.height - 10);
+    
+    // Diagonal light watermark
+    ctx.save();
+    ctx.globalAlpha = 0.15;
+    ctx.font = "bold 26px Arial";
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.rotate(-Math.PI/4);
+    ctx.fillText("FAKE", 0, 0);
+    ctx.restore();
+
+    const link = document.createElement('a');
+    link.download = 'fake-chat-formatpure.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.9);
+    link.click();
+  });
+}
 </script>
 </body>
   </html>
