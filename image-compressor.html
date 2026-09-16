@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Compressor - FormatPure</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:#0f172a;color:#fff;min-height:100vh;padding:20px}
+.container{max-width:600px;margin:0 auto}
+h1{text-align:center;font-size:32px;margin:10px 0}
+.sub{text-align:center;color:#94a3b8;margin-bottom:20px}
+.top-btn{display:block;text-align:center;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;padding:16px;border-radius:30px;text-decoration:none;font-weight:700;margin-bottom:20px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:20px}
+.upload{border:2px dashed #475569;border-radius:12px;padding:30px;text-align:center;color:#94a3b8;cursor:pointer;margin-bottom:15px}
+.upload input{display:none}
+.preview{max-width:100%;border-radius:12px;margin:10px 0;display:none}
+.row{display:flex;justify-content:space-between;margin:15px 0;color:#cbd5e1}
+input[type=range]{width:100%;accent-color:#6366f1}
+.btn-main{width:100%;background:#4f46e5;color:#fff;border:none;padding:15px;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;margin-top:15px}
+.btn-dl{width:100%;background:#16a34a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;margin-top:10px;display:none}
+.stats{display:flex;justify-content:space-between;margin-top:15px;color:#94a3b8;font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FormatPure</h1>
+<p class="sub">Compress images instantly, reduce size without losing quality.</p>
+<a href="#" class="top-btn">✨ Open Font Generator Tool &nbsp; →</a>
+<div class="card">
+<div class="upload" onclick="document.getElementById('file').click()">
+📁 Click to upload image
+<input type="file" id="file" accept="image/*">
+</div>
+<img id="preview" class="preview">
+<div class="row"><span>Quality: <b id="qval">80%</b></span></div>
+<input type="range" id="quality" min="10" max="95" value="80">
+<div class="stats"><span id="orig"></span><span id="comp"></span></div>
+<button class="btn-main" onclick="compress()">✨ Compress Image</button>
+<button class="btn-dl" id="dlBtn">Download Compressed</button>
+</div>
+</div>
+<script>
+let imgSrc, compUrl;
+document.getElementById('file').addEventListener('change', e=>{
+ const f=e.target.files[0]; if(!f) return;
+ document.getElementById('orig').textContent='Original: '+(f.size/1024).toFixed(1)+' KB';
+ const r=new FileReader(); r.onload=ev=>{imgSrc=ev.target.result;
+ const p=document.getElementById('preview'); p.src=imgSrc; p.style.display='block';};
+ r.readAsDataURL(f);
+});
+document.getElementById('quality').addEventListener('input', e=>{
+ document.getElementById('qval').textContent=e.target.value+'%';
+});
+function compress(){
+ if(!imgSrc){alert('Upload image first');return;}
+ const q=document.getElementById('quality').value/100;
+ const img=new Image(); img.onload=()=>{
+  const c=document.createElement('canvas');
+  c.width=img.width; c.height=img.height;
+  c.getContext('2d').drawImage(img,0,0);
+  c.toBlob(b=>{
+   compUrl=URL.createObjectURL(b);
+   document.getElementById('comp').textContent='Compressed: '+(b.size/1024).toFixed(1)+' KB';
+   const d=document.getElementById('dlBtn'); d.style.display='block';
+   d.onclick=()=>{const a=document.createElement('a');a.href=compUrl;a.download='compressed.jpg';a.click();}
+  },'image/jpeg',q);
+ }; img.src=imgSrc;
+}
+</script>
+</body>
+</html>
