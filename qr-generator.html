@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator - FormatPure</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
+.container{max-width:500px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
+h1{color:#38bdf8}
+input{width:90%;padding:12px;border-radius:8px;border:0;margin:10px 0;font-size:16px}
+button{background:#38bdf8;color:#000;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0;font-size:16px}
+#qr{background:#fff;padding:15px;border-radius:10px;display:inline-block;margin:15px 0}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>QR Code Generator</h1>
+<p>Create QR for link, text, WhatsApp - Free</p>
+<input id="text" placeholder="Paste link or text here... e.g. https://instagram.com/...">
+<button onclick="makeQR()">Generate QR Code</button>
+<div><div id="qr"></div></div>
+<button onclick="downloadQR()" style="background:#22c55e">Download PNG</button>
+<a href="index.html" style="color:#38bdf8;display:block;margin-top:15px">← Back to Home</a>
+</div>
+
+<script>
+let qrCanvas;
+function makeQR(){
+  const val=document.getElementById('text').value;
+  if(!val) return alert('Enter text first');
+  document.getElementById('qr').innerHTML='';
+  QRCode.toCanvas(val,{width:250,margin:2},(err,canvas)=>{
+    if(err) return alert(err);
+    document.getElementById('qr').appendChild(canvas);
+    qrCanvas=canvas;
+  });
+}
+function downloadQR(){
+  if(!qrCanvas) return alert('Generate first');
+  const a=document.createElement('a');
+  a.download='formatpure-qr.png';
+  a.href=qrCanvas.toDataURL();
+  a.click();
+}
+</script>
+</body>
+</html>
