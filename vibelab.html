@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VibeLab - GenZ Tool Hub</title>
+<style>
+body{margin:0;background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial;text-align:center}
+header{padding:20px;background:linear-gradient(90deg,#ff006a,#7a00ff)}
+h1{margin:0;font-size:26px}
+.tabs{display:flex;overflow-x:auto;background:#15151f;padding:8px;gap:8px}
+.tab{padding:10px 18px;background:#232334;border-radius:20px;white-space:nowrap;cursor:pointer;font-weight:bold}
+.tab.active{background:#ff006a}
+.page{display:none;padding:15px}
+.page.active{display:block}
+.box{background:#15151f;padding:16px;border-radius:16px;margin:12px auto;max-width:500px;border:1px solid #2a2a3a}
+input,select,button,textarea{width:92%;max-width:450px;padding:13px;margin:6px;border-radius:12px;border:none;font-size:15px}
+button{background:linear-gradient(90deg,#ff006a,#7a00ff);color:#fff;font-weight:bold;cursor:pointer}
+canvas{background:#000;border-radius:12px;max-width:100%;margin-top:10px}
+.rizz{font-size:42px;font-weight:900;color:#ff006a}
+.small{color:#999;font-size:13px}
+</style>
+</head>
+<body>
+<header><h1>💜 VibeLab</h1><p style="margin:5px 0 0 0">Meme • Rizz • Captions • Roast - No Watermark</p></header>
+<div class="tabs">
+<div class="tab active" onclick="show(0)">🔥 Meme Maker</div>
+<div class="tab" onclick="show(1)">😎 Rizz Check</div>
+<div class="tab" onclick="show(2)">✨ Caption Lab</div>
+<div class="tab" onclick="show(3)">💀 Roast Me</div>
+</div>
+
+<!-- PAGE 0 MEME -->
+<div class="page active">
+<div class="box">
+<h3>🔥 Viral Meme Maker</h3>
+<input type="file" id="f" accept="image/*">
+<input id="t1" placeholder="TOP TEXT" oninput="draw()">
+<input id="b1" placeholder="BOTTOM TEXT" oninput="draw()">
+<canvas id="c"></canvas><br>
+<button onclick="dl()">Download - No Watermark</button>
+<p class="small">Upload → Type → Download → Post on Insta Story</p>
+</div>
+</div>
+
+<!-- PAGE 1 RIZZ -->
+<div class="page">
+<div class="box">
+<h3>😎 Rizz-O-Meter PRO</h3>
+<input id="n1" placeholder="Your Name">
+<input id="n2" placeholder="Crush Name">
+<button onclick="rizz()">Check Rizz %</button>
+<div id="rout" class="rizz"></div>
+<p id="rtext"></p>
+<button onclick="shareRizz()">Share on Snapchat / Insta</button>
+</div>
+</div>
+
+<!-- PAGE 2 CAPTION -->
+<div class="page">
+<div class="box">
+<h3>✨ Aesthetic Caption Generator</h3>
+<select id="mood">
+<option>😈 Baddie Vibe</option>
+<option>💔 Sad / Broken</option>
+<option>🥶 Savage / Attitude</option>
+<option>😍 Soft / Love</option>
+<option>🤙 Chill / Cool</option>
+</select>
+<button onclick="genCap()">Generate Caption</button>
+<textarea id="capout" rows="4" placeholder="Your viral caption will appear here..."></textarea>
+<button onclick="copyCap()">Copy Caption</button>
+</div>
+</div>
+
+<!-- PAGE 3 ROAST -->
+<div class="page">
+<div class="box">
+<h3>💀 GenZ Roast Generator</h3>
+<input id="roastname" placeholder="Enter Friend Name">
+<button onclick="genRoast()">Roast Him 😂</button>
+<h3 id="roastout" style="color:#ff4d6d"></h3>
+</div>
+</div>
+
+<a href="index.html" style="color:#38bdf8;display:block;margin:20px">← Back to FormatPure</a>
+
+<script>
+let img=new Image();let c=document.getElementById('c'),x=c.getContext('2d');
+document.getElementById('f').onchange=e=>{let r=new FileReader();r.onload=()=>{img.onload=draw;img.src=e.target.result};r.readAsDataURL(e.target.files[0])}
+function draw(){if(!img.src)return;c.width=img.width>600?600:img.width;c.height=img.height*(c.width/img.width);x.drawImage(img,0,0,c.width,c.height);x.fillStyle='white';x.strokeStyle='black';x.lineWidth=4;x.font='bold 34px Impact,Arial';x.textAlign='center';x.strokeText(t1.value.toUpperCase(),c.width/2,50);x.fillText(t1.value.toUpperCase(),c.width/2,50);x.strokeText(b1.value.toUpperCase(),c.width/2,c.height-20);x.fillText(b1.value.toUpperCase(),c.width/2,c.height-20)}
+function dl(){let a=document.createElement('a');a.download='vibelab-meme.png';a.href=c.toDataURL();a.click()}
+function show(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('active',k==i))}
+function rizz(){let a=n1.value,b=n2.value;let s=(a.length+b.length)*9+Math.floor(Math.random()*40);if(s>100)s=98;let t=s>85?'CERTIFIED RIZZLER 😎💋':s>65?'You got Rizz 🔥':s>40?'Mid Rizz, try harder 😅':'NO RIZZ 💀 RIP';rout.innerText=s+'%';rtext.innerText=t+' - '+b}
+function shareRizz(){navigator.clipboard.writeText('My Rizz with '+(n2.value||'crush')+' is '+rout.innerText+' 😎 Check yours: https://formatpure.github.io/vibelab.html');alert('Copied! Paste on Insta Story')}
+let caps={'Baddie Vibe':['not lucky, just worth it 💅','princess treatment only 👑','too glam to give a damn ✨'],'Sad / Broken':['broken but still pretty 💔','smiling but hurting inside 🥀','lost in my own thoughts 🌙'],'Savage / Attitude':['my life, my rules 😈','unbothered. moisturized. happy.','silent but savage 🥶'],'Soft / Love':['you + me = my fav story 💌','soft heart, hard to get 🤍','in love with the little moments ✨'],'Chill / Cool':['good vibes only 🤙','chill guy, chill life 😎','no stress, just blessed 🌊']};
+function genCap(){let m=document.getElementById('mood').value.split(' ')[1]||'Baddie Vibe';let key=Object.keys(caps).find(k=>m.includes(k.split(' ')[0]))||'Baddie Vibe';let arr=caps[key];capout.value=arr[Math.floor(Math.random()*arr.length)]+' \n.\n#'+key.replace(/[^a-z]/gi,'').toLowerCase()+' #aesthetic #genz'}
+function copyCap(){navigator.clipboard.writeText(capout.value);alert('Caption Copied!')}
+let roasts=['$NAME still uses 2018 memes 💀','$NAME ka rizz to WiFi jaisa hai, disconnect hi rehta 😂','$NAME Snap streak ke alawa kuch maintain nahi kar sakta','$NAME insta bio me CEO likha hai, company khud dhund rahi use','bro thinks he is rizzler, but he is just razzler 💀'];
+function genRoast(){let n=roastname.value||'He';let r=roasts[Math.floor(Math.random()*roasts.length)].replace('$NAME',n);roastout.innerText=r}
+</script>
+</body>
+</html>
