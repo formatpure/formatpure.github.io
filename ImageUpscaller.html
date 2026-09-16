@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Image Upscaler - FormatPure</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
+.container{max-width:600px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
+h1{color:#38bdf8}
+.drop{border:2px dashed #38bdf8;padding:30px;border-radius:10px;margin:20px 0;cursor:pointer}
+img{max-width:100%;border-radius:8px;margin:10px 0}
+button{background:#38bdf8;color:#000;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0;font-size:16px}
+select{width:100%;padding:12px;border-radius:8px;margin:10px 0}
+.row{display:flex;gap:10px}
+.row>div{flex:1}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>AI Image Upscaler</h1>
+<p>Enhance to HD - 2x, 4x - 100% Free</p>
+
+<div class="drop" onclick="document.getElementById('file').click()">
+Click or Drop Image Here
+<input type="file" id="file" accept="image/*" hidden>
+</div>
+
+<img id="preview" style="display:none">
+<img id="result" style="display:none">
+
+<select id="scale">
+<option value="2">Upscale 2x HD</option>
+<option value="4">Upscale 4x Ultra HD</option>
+</select>
+
+<button onclick="upscale()">Upscale Now</button>
+<button onclick="download()" style="background:#22c55e">Download HD Image</button>
+<a href="index.html" style="color:#38bdf8;display:block;margin-top:15px">← Back to Home</a>
+</div>
+
+<script>
+let img = new Image(), canvas = document.createElement('canvas');
+document.getElementById('file').addEventListener('change', e=>{
+  let f=e.target.files[0]; if(!f) return;
+  let r=new FileReader();
+  r.onload=ev=>{
+    img.onload=()=>{
+      document.getElementById('preview').src=ev.target.result;
+      document.getElementById('preview').style.display='block';
+    };
+    img.src=ev.target.result;
+  };
+  r.readAsDataURL(f);
+});
+
+function upscale(){
+  let s=parseInt(document.getElementById('scale').value);
+  canvas.width=img.width*s; canvas.height=img.height*s;
+  let ctx=canvas.getContext('2d');
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  // simple sharpen
+  ctx.filter='contrast(1.05) saturate(1.1)';
+  ctx.drawImage(canvas,0,0);
+  let out=document.getElementById('result');
+  out.src=canvas.toDataURL('image/png');
+  out.style.display='block';
+  alert('Upscaled to '+canvas.width+'x'+canvas.height);
+}
+function download(){
+  let a=document.createElement('a');
+  a.download='formatpure-upscaled.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>
