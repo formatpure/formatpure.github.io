@@ -24,48 +24,13 @@ button{background:#00ff88;color:#000;font-weight:bold;cursor:pointer}
 <header>💸 FLEXLAB <div class="sub">by formatpure.github.io - Global Viral Lab</div></header>
 
 <div class="tabs">
-<div class="tab active" onclick="show(0)">💰 Bank Flex</div>
-<div class="tab" onclick="show(1)">💬 iMessage</div>
-<div class="tab" onclick="show(2)">💖 Soulmate</div>
+
+<div class="tab" onclick="show(1)">💖 Soulmate</div>
 </div>
 
-<!-- TAB 1 BANK -->
-<div class="page active" id="p0">
-<div class="box">
-<h3>💰 Fake Bank Balance - For Boys Flex</h3>
-<input id="bankName" placeholder="Your Name" value="Alex Carter">
-<input id="bankBal" placeholder="Balance (e.g. 9,999,999)" value="9,999,999">
-<select id="bankCurr"><option>$ USD</option><option>£ GBP</option><option>₹ INR</option><option>Rs PKR</option></select>
-<button onclick="makeBank()">Generate Flex 💸</button>
-<button onclick="dl('bankBox')" style="background:#fff">📸 Download</button>
-</div>
-<div class="preview" id="bankBox">
-<div class="bank-top"><div style="font-size:12px;opacity:.7">Checking • 4821</div><div id="bankBalOut" style="font-size:32px;font-weight:900;margin-top:10px">$ 9,999,999.00</div><div id="bankNameOut" style="margin-top:8px;font-size:13px">Alex Carter • Available</div></div>
-<div style="padding:10px;font-size:12px;color:#666">Today • Deposit from Business Inc.</div>
-<div class="watermark">formatpure.github.io</div>
-</div>
-</div>
 
-<!-- TAB 2 IMESSAGE -->
-<div class="page" id="p1">
-<div class="box">
-<h3>💬 Fake iPhone iMessage - USA Viral</h3>
-<input id="imName" placeholder="Contact (e.g. Mom ❤️)" value="Mom ❤️" oninput="document.getElementById('imH').innerText=this.value">
-<input type="file" id="imAvatar" accept="image/*">
-<select id="imType"><option value="grey">Received (Grey)</option><option value="blue">Sent (Blue)</option></select>
-<input id="imText" placeholder="Type message">
-<button onclick="addIm()">Add Message</button>
-<button onclick="document.getElementById('imMsgs').innerHTML=''" style="background:#222;color:#fff">Clear</button>
-<button onclick="dl('imBox')" style="background:#000;color:#fff">📸 Download</button>
-</div>
-<div class="preview" id="imBox" style="background:#fff">
-<div style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid #eee"><img id="imImg" src="https://i.pravatar.cc/100?img=1" style="width:32px;height:32px;border-radius:50%"><div id="imH" style="font-weight:bold;font-size:14px">Mom ❤️</div></div>
-<div id="imMsgs" style="display:flex;flex-direction:column;padding:10px;min-height:250px"></div>
-<div class="watermark">formatpure.github.io</div>
-</div>
-</div>
 
-<!-- TAB 3 SOULMATE -->
+<!-- TAB SOULMATE -->
 <div class="page" id="p2">
 <div class="box">
 <h3>💖 Soulmate Predictor - Girls Addiction</h3>
