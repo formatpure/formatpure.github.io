@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PureID - Free Passport Photo Maker - Forever Free - FormatPure</title>
+<style>
+body{margin:0;background:#070710;color:#fff;font-family:Arial;text-align:center}
+header{padding:14px;background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000;font-weight:900;font-size:18px}
+.badge{display:inline-block;background:#000;color:#00ff88;padding:4px 10px;border-radius:20px;font-size:10px;margin-top:6px;border:1px solid #00ff88}
+.box{background:#151525;padding:14px;border-radius:16px;margin:12px auto;max-width:460px;border:1px solid #2a2a4a}
+.upload{border:2px dashed #00ff88;border-radius:14px;padding:20px;margin:10px 0;cursor:pointer;background:#0a0a18;font-weight:bold}
+input[type=file]{display:none}
+button{width:94%;padding:13px;margin:6px;border-radius:12px;border:none;font-weight:900;font-size:13px;cursor:pointer}
+.btn-green{background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000}
+.btn-dark{background:#222;color:#fff;border:1px solid #444}
+canvas{background:#000;border-radius:10px;width:100%;max-width:340px;border:2px solid #333}
+.controls{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.controls button{width:30%;font-size:11px;padding:10px}
+.slider{width:90%;margin:6px 0}
+.small{font-size:11px;color:#aaa}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opt{padding:10px;background:#222;border-radius:10px;font-size:12px;border:1px solid #333;cursor:pointer}
+.opt.active{background:#00ff88;color:#000;font-weight:900}
+</style>
+</head><body>
+<header>🪪 PUREID - PASSPORT PHOTO LAB<div style="font-size:11px">Save 300 Rs - 100% FREE FOREVER</div><div class="badge">WORKS OFFLINE - NO WATERMARK - FORMATPURE.GITHUB.IO</div></header>
+
+<div class="box">
+<h3>1. Upload Your Photo</h3>
+<p class="small">Any photo - Front face is best, but works with any</p>
+<div class="upload" onclick="fileInput.click()">📁 Click to Upload Photo<br><span style="font-size:10px;color:#888">From Gallery / Camera</span></div>
+<input type="file" id="fileInput" accept="image/*">
+
+<canvas id="cropCanvas" width="413" height="531"></canvas>
+<p class="small">👆 This is your Passport Photo (35x45mm) - Drag slider to zoom face</p>
+
+<label class="small">Zoom: <span id="zoomVal">100</span>%</label><br>
+<input type="range" id="zoomSlider" min="50" max="250" value="100" class="slider" oninput="zoomVal.innerText=this.value; drawCrop()">
+<div class="controls">
+<button class="btn-dark" onclick="moveY(-20)">⬆️ Up</button>
+<button class="btn-dark" onclick="moveY(20)">⬇️ Down</button>
+<button class="btn-dark" onclick="moveX(-20)">⬅️ Left</button>
+<button class="btn-dark" onclick="moveX(20)">➡️ Right</button>
+</div>
+
+<h3>2. Background</h3>
+<div class="grid">
+<div class="opt active" id="bgWhite" onclick="setBG('white')">✅ White BG (For Form)</div>
+<div class="opt" id="bgOrig" onclick="setBG('orig')">🖼️ Original BG</div>
+</div>
+
+<h3>3. Print Sheet Size</h3>
+<p class="small">How many photos on one A4 page?</p>
+<div class="grid">
+<div class="opt active" id="s12" onclick="setSheet(12)">12 Photos (Standard)</div>
+<div class="opt" id="s8" onclick="setSheet(8)">8 Photos (Big)</div>
+<div class="opt" id="s20" onclick="setSheet(20)">20 Photos (Small)</div>
+<div class="opt" id="s1" onclick="setSheet(1)">1 Photo Only</div>
+</div>
+
+<button class="btn-green" onclick="makeSheet()">🖨️ MAKE A4 PRINT SHEET</button>
+<button class="btn-dark" onclick="downloadCanvas('cropCanvas','single-passport.png')">📥 Download Single Photo</button>
+
+<h3 style="margin-top:16px">A4 Print Sheet Preview</h3>
+<canvas id="sheetCanvas" width="1240" height="1754" style="max-width:100%;background:#fff"></canvas>
+<br>
+<button class="btn-green" onclick="downloadCanvas('sheetCanvas','A4-Passport-Sheet-FormatPure.png')">📥 Download A4 Sheet - Print at Shop for 20 Rs</button>
+
+<p class="small" style="margin-top:12px;color:#00ff88">💡 Go to any printing shop, show this A4 photo, print for 20 Rs. You saved 280 Rs!</p>
+</div>
+
+<a href="index.html" style="color:#00ff88;display:block;margin:20px;font-weight:900;text-decoration:none">🏠 Back Home</a>
+
+<script>
+let img=null, scale=1, offsetX=0, offsetY=0, bgMode='white', sheetCount=12;
+const cropC=document.getElementById('cropCanvas'), ctx=cropC.getContext('2d');
+const sheetC=document.getElementById('sheetCanvas'), sctx=sheetC.getContext('2d');
+
+fileInput.addEventListener('change', e=>{
+ let f=e.target.files[0]; if(!f)return;
+ let r=new FileReader(); r.onload=ev=>{
+  let i=new Image(); i.onload=()=>{img=i; scale=1; offsetX=0; offsetY=0; drawCrop();}; i.src=ev.target.result;
+ }; r.readAsDataURL(f);
+});
+
+function drawCrop(){
+ if(!img)return;
+ ctx.clearRect(0,0,cropC.width,cropC.height);
+ // white bg
+ if(bgMode=='white'){ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,cropC.width,cropC.height);}
+ let zoom=parseInt(document.getElementById('zoomSlider').value)/100;
+ let iw=img.width, ih=img.height;
+ let baseScale=Math.max(cropC.width/iw, cropC.height/ih);
+ let finalScale=baseScale*zoom*scale;
+ let w=iw*finalScale, h=ih*finalScale;
+ let x=(cropC.width-w)/2+offsetX, y=(cropC.height-h)/2+offsetY;
+ ctx.drawImage(img,x,y,w,h);
+ // face guide oval
+ ctx.strokeStyle='rgba(0,255,136,0.4)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+ ctx.beginPath(); ctx.ellipse(cropC.width/2, cropC.height/2.2, cropC.width*0.32, cropC.height*0.32, 0,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+}
+function moveX(v){offsetX+=v; drawCrop()}
+function moveY(v){offsetY+=v; drawCrop()}
+function setBG(m){
+ bgMode=m;
+ document.getElementById('bgWhite').classList.toggle('active',m=='white');
+ document.getElementById('bgOrig').classList.toggle('active',m=='orig');
+ drawCrop();
+}
+function setSheet(n){
+ sheetCount=n;
+ document.querySelectorAll('.grid.opt').forEach(el=>el.classList.remove('active'));
+ document.getElementById('s'+n).classList.add('active');
+}
+function makeSheet(){
+ if(!img){alert('First upload photo!'); return;}
+ sctx.fillStyle='#ffffff'; sctx.fillRect(0,0,sheetC.width,sheetC.height);
+ let cols, rows;
+ if(sheetCount==1){cols=1;rows=1} else if(sheetCount==8){cols=2;rows=4} else if(sheetCount==12){cols=3;rows=4} else {cols=4;rows=5}
+ let pw=Math.floor((sheetC.width-40)/cols), ph=Math.floor(pw*531/413);
+ let gap=12;
+ let startX=(sheetC.width-(cols*pw+(cols-1)*gap))/2;
+ let startY=20;
+ // create temp small passport image
+ let temp=document.createElement('canvas'); temp.width=413; temp.height=531;
+ let tctx=temp.getContext('2d'); tctx.drawImage(cropC,0,0);
+ for(let r=0;r<rows;r++){
+  for(let c=0;c<cols;c++){
+   if(r*cols+c>=sheetCount)break;
+   let x=startX+c*(pw+gap), y=startY+r*(ph+gap);
+   sctx.drawImage(temp,x,y,pw,ph);
+   sctx.strokeStyle='#e0e0e0'; sctx.lineWidth=1; sctx.strokeRect(x,y,pw,ph);
+  }
+ }
+ sctx.fillStyle='#000'; sctx.font='12px Arial'; sctx.fillText('Made with formatpure.github.io - FREE FOREVER',10,sheetC.height-10);
+}
+function downloadCanvas(id,name){
+ let c=document.getElementById(id); let a=document.createElement('a'); a.download=name; a.href=c.toDataURL('image/png'); a.click();
+}
+// initial white
+drawCrop();
+</script>
+</body></html>
