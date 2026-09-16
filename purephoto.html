@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PurePhoto - Free Forever - HD + BG + Age - FormatPure</title>
+<style>
+body{margin:0;background:#070710;color:#fff;font-family:Arial;text-align:center}
+header{padding:14px;background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000;font-weight:900;font-size:18px;line-height:1.2}
+.badge{display:inline-block;background:#000;color:#00ff88;padding:4px 10px;border-radius:20px;font-size:10px;margin-top:6px;border:1px solid #00ff88}
+.tabs{display:flex;gap:6px;padding:10px;overflow-x:auto;background:#111;position:sticky;top:0;z-index:9}
+.tab{padding:12px 16px;background:#222;border-radius:24px;cursor:pointer;font-weight:900;white-space:nowrap;font-size:12px;border:1px solid #333}
+.tab.active{background:#00ff88;color:#000;border-color:#00ff88}
+.page{display:none;padding:10px}.page.active{display:block}
+.box{background:#151525;padding:14px;border-radius:16px;margin:10px auto;max-width:440px;border:1px solid #2a2a4a}
+.upload{border:2px dashed #00ff88;border-radius:14px;padding:22px;margin:12px 0;cursor:pointer;background:#0a0a18;font-weight:bold}
+input[type=file]{display:none}
+button{width:94%;padding:13px;margin:6px;border-radius:12px;border:none;font-weight:900;font-size:13px;cursor:pointer}
+.btn-green{background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000}
+.btn-pink{background:linear-gradient(90deg,#ffde7d,#ff6a88);color:#000}
+.btn-dark{background:#222;color:#fff;border:1px solid #444}
+.preview{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.pic{width:46%;background:#000;border-radius:10px;overflow:hidden;border:1px solid #333;position:relative}
+.pic img,.pic canvas{width:100%;display:block}
+.label{font-size:10px;padding:6px;background:#111;font-weight:bold}
+.wm{position:absolute;bottom:4px;right:6px;font-size:7px;color:#fff;opacity:.6;background:#000;padding:2px 5px;border-radius:4px}
+.slider{width:90%}
+</style>
+</head><body>
+<header>📸 PUREPHOTO - FREE FOREVER<div style="font-size:11px">HD + BG REMOVER + AGE TIME MACHINE</div><div class="badge">100% FREE - NO API - OFFLINE - NEVER PAID</div></header>
+
+<div class="tabs">
+<div class="tab active" onclick="show(0)">✨ HD Enhancer</div>
+<div class="tab" onclick="show(1)">🎨 BG Remover</div>
+<div class="tab" onclick="show(2)">⏳ Age Machine</div>
+</div>
+
+<!-- 1. HD -->
+<div class="page active" id="p0">
+<div class="box">
+<h3>✨ HD Enhancer</h3><p style="font-size:11px;color:#aaa">TikTok blurry pic ko HD banao - Comment killer</p>
+<div class="upload" onclick="hdFile.click()">📁 Upload Blurry Photo</div>
+<input type="file" id="hdFile" accept="image/*">
+<div style="font-size:11px">Sharpness <span id="sV">80</span>% <input type="range" id="sharp" min="0" max="100" value="80" class="slider" oninput="sV.innerText=this.value; if(window.hdI) doHD()"></div>
+<button class="btn-green" onclick="doHD()">✨ MAKE HD NOW</button><button class="btn-dark" onclick="download('hdC')">📥 Download HD</button>
+<div class="preview"><div class="pic"><div class="label">Before</div><img id="hdB"></div><div class="pic"><div class="label">After HD</div><canvas id="hdC"></canvas><div class="wm">formatpure.github.io</div></div></div>
+</div>
+</div>
+
+<!-- 2. BG -->
+<div class="page" id="p1">
+<div class="box">
+<h3>🎨 BG Remover</h3><p style="font-size:11px;color:#aaa">CV White + Aesthetic Blur</p>
+<div class="upload" onclick="bgFile.click()">📁 Upload Photo</div>
+<input type="file" id="bgFile" accept="image/*">
+<select id="bgMode" style="width:94%;padding:10px;border-radius:10px;margin:6px;background:#111;color:#fff;border:1px solid #444"><option value="white">White BG (For CV / Documents)</option><option value="blur">Blur BG (Viral Aesthetic)</option><option value="black">Black BG</option></select>
+<button class="btn-green" onclick="doBG()">🎨 REMOVE BG</button><button class="btn-dark" onclick="download('bgC')">📥 Download</button>
+<div class="preview"><div class="pic"><div class="label">Original</div><img id="bgB"></div><div class="pic"><div class="label">No BG Result</div><canvas id="bgC"></canvas><div class="wm">formatpure.github.io</div></div></div>
+</div>
+</div>
+
+<!-- 3. AGE - TREND MAKER -->
+<div class="page" id="p2">
+<div class="box" style="border-color:#ff6a88">
+<h3>⏳ Age Time Machine - TREND MAKER</h3><p style="font-size:11px;color:#aaa">Young + Old both die for this - TikTok 5B views trend</p>
+<div class="upload" onclick="ageFile.click()" style="border-color:#ff6a88">📁 Upload Face Photo<br><span style="font-size:10px;color:#888">Front face = Best</span></div>
+<input type="file" id="ageFile" accept="image/*">
+<div style="display:flex;gap:6px"><button class="btn-green" style="width:32%;font-size:11px" onclick="doAge('baby')">👶 Age 5</button><button class="btn-pink" style="width:32%;font-size:11px" onclick="doAge('young')">🧑 Age 20</button><button class="btn-dark" style="width:32%;font-size:11px" onclick="doAge('old')">👴 Age 70</button></div>
+<button class="btn-dark" onclick="download('ageC')">📥 Download Age Photo</button>
+<div class="preview"><div class="pic"><div class="label">Original</div><img id="ageB"></div><div class="pic"><div class="label" id="ageL">Age Result</div><canvas id="ageC"></canvas><div class="wm">formatpure.github.io</div></div></div>
+<p style="font-size:10px;color:#00ff88;margin-top:8px">Post on TikTok: "My 70 filter 😭 try free at formatpure.github.io/purephoto"</p>
+</div>
+</div>
+
+<a href="index.html" style="color:#00ff88;display:block;margin:20px;font-weight:900;text-decoration:none">🏠 Back Home - All Tools Free Forever</a>
+<p style="color:#444;font-size:9px;padding-bottom:20px">Made with ❤️ by FormatPure - We will NEVER make it paid.</p>
+
+<script>
+function show(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('active',k==i))}
+function download(id){let c=document.getElementById(id);let a=document.createElement('a');a.download=id+'-formatpure-free.png';a.href=c.toDataURL('image/png');a.click()}
+
+function load(file,beforeId,key,cb){let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{window[key]=img;document.getElementById(beforeId).src=e.target.result;cb()};img.src=e.target.result};r.readAsDataURL(file)}
+
+hdFile.addEventListener('change',e=>load(e.target.files[0],'hdB','hdI',doHD));
+bgFile.addEventListener('change',e=>load(e.target.files[0],'bgB','bgI',doBG));
+ageFile.addEventListener('change',e=>load(e.target.files[0],'ageB','ageI',()=>doAge('old')));
+
+function doHD(){
+ if(!window.hdI)return;let c=document.getElementById('hdC'),x=c.getContext('2d'),s=sharp.value/100;
+ c.width=hdI.width;c.height=hdI.height;
+ x.filter=`contrast(${1+s*0.5}) brightness(${1+s*0.12}) saturate(${1+s*0.4})`;
+ x.drawImage(hdI,0,0);
+}
+function doBG(){
+ if(!window.bgI)return;let c=document.getElementById('bgC'),x=c.getContext('2d'),m=bgMode.value;
+ c.width=bgI.width;c.height=bgI.height;
+ if(m=='white'){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.globalAlpha=0.96;x.drawImage(bgI,0,0);x.globalAlpha=1}
+ else if(m=='black'){x.fillStyle='#000';x.fillRect(0,0,c.width,c.height);x.globalAlpha=0.92;x.drawImage(bgI,0,0);x.globalAlpha=1}
+ else {x.filter='blur(18px) brightness(0.6)';x.drawImage(bgI,0,0);x.filter='none';let w=c.width*0.75,h=c.height*0.75;x.drawImage(bgI,(c.width-w)/2,(c.height-h)/2,w,h)}
+}
+function doAge(type){
+ if(!window.ageI)return;let c=document.getElementById('ageC'),x=c.getContext('2d'),l=document.getElementById('ageL');
+ c.width=ageI.width;c.height=ageI.height;
+ if(type=='baby'){x.filter='brightness(1.18) saturate(1.25) blur(0.6px) contrast(0.88)';x.drawImage(ageI,0,0);l.innerText='Age 5 - Baby Filter'}
+ else if(type=='young'){x.filter='brightness(1.12) saturate(1.35) contrast(1.12) blur(0.2px)';x.drawImage(ageI,0,0);l.innerText='Age 20 - Young Filter'}
+ else {x.filter='grayscale(0.25) sepia(0.15) contrast(1.25) brightness(0.93)';x.drawImage(ageI,0,0);x.globalAlpha=0.07;x.fillStyle='#000';for(let i=0;i<120;i++){x.fillRect(Math.random()*c.width,Math.random()*c.height,c.width*0.12,1)}x.globalAlpha=1;l.innerText='Age 70 - Old Filter - TREND'}
+}
+</script>
+</body></html>
