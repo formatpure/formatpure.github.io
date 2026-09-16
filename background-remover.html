@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Background Remover - FormatPure</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
+.container{max-width:600px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
+h1{color:#38bdf8}
+.drop{border:2px dashed #38bdf8;padding:30px;border-radius:10px;margin:20px 0;cursor:pointer}
+img{max-width:100%;border-radius:8px;margin:10px 0}
+button{background:#38bdf8;color:#000;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0;font-size:16px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>AI Background Remover</h1>
+<p>Remove background in 1 click - 100% Free</p>
+
+<div class="drop" onclick="document.getElementById('file').click()">
+Click or Drop Image Here
+<input type="file" id="file" accept="image/*" hidden>
+</div>
+
+<img id="preview" style="display:none">
+<img id="result" style="display:none">
+<p id="status"></p>
+
+<button onclick="removeBg()">Remove Background</button>
+<button onclick="download()" style="background:#22c55e">Download PNG</button>
+<a href="index.html" style="color:#38bdf8;display:block;margin-top:15px">← Back to Home</a>
+</div>
+
+<script type="module">
+import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
+let fileBlob, resultBlob;
+const fileInput = document.getElementById('file');
+
+fileInput.addEventListener('change', e=>{
+  fileBlob = e.target.files[0];
+  document.getElementById('preview').src = URL.createObjectURL(fileBlob);
+  document.getElementById('preview').style.display='block';
+});
+
+window.removeBg = async ()=>{
+  if(!fileBlob) return alert('Upload image first');
+  document.getElementById('status').innerText='Removing background... please wait';
+  resultBlob = await removeBackground(fileBlob);
+  document.getElementById('result').src = URL.createObjectURL(resultBlob);
+  document.getElementById('result').style.display='block';
+  document.getElementById('status').innerText='Done!';
+}
+
+window.download = ()=>{
+  if(!resultBlob) return alert('Remove background first');
+  let a=document.createElement('a');
+  a.href=URL.createObjectURL(resultBlob);
+  a.download='formatpure-no-bg.png';
+  a.click();
+}
+</script>
+</body>
+</html>
