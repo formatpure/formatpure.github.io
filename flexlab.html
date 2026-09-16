@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FlexLab - Global Viral Tool by FormatPure</title>
+<style>
+body{margin:0;background:#050510;color:#fff;font-family:Arial;text-align:center}
+header{padding:16px;background:linear-gradient(90deg,#00ff88,#00d4ff);color:#000;font-weight:900;font-size:22px}
+.sub{font-size:12px;opacity:.7}
+.tabs{display:flex;gap:8px;padding:10px;overflow-x:auto;background:#0f0f1f;position:sticky;top:0;z-index:9}
+.tab{padding:10px 16px;background:#1e1e32;border-radius:20px;cursor:pointer;font-weight:bold;white-space:nowrap}
+.tab.active{background:#00ff88;color:#000}
+.page{display:none;padding:12px}.page.active{display:block}
+.box{background:#12122a;padding:16px;border-radius:16px;margin:10px auto;max-width:420px;border:1px solid #222}
+input,select,button{width:92%;padding:12px;margin:6px;border-radius:10px;border:none;font-size:15px}
+button{background:#00ff88;color:#000;font-weight:bold;cursor:pointer}
+.preview{width:95%;max-width:380px;margin:12px auto;background:#fff;color:#000;border-radius:14px;padding:12px;text-align:left;position:relative;overflow:hidden}
+.watermark{position:absolute;bottom:6px;right:8px;font-size:9px;color:#000;opacity:.4;font-weight:bold;letter-spacing:1px}
+.bank-top{background:linear-gradient(90deg,#1a1a2e,#16213e);color:#fff;padding:14px;border-radius:10px}
+.imsg-bubble{max-width:70%;padding:10px 14px;border-radius:18px;font-size:14px;margin:6px 0}
+.imsg-blue{background:#0a84ff;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.imsg-grey{background:#e5e5ea;color:#000;align-self:flex-start;border-bottom-left-radius:4px}
+.poster{background:linear-gradient(135deg,#ff006a,#7a00ff,#00d4ff);color:#fff;padding:20px;border-radius:14px;text-align:center}
+</style>
+</head><body>
+<header>💸 FLEXLAB <div class="sub">by formatpure.github.io - Global Viral Lab</div></header>
+
+<div class="tabs">
+<div class="tab active" onclick="show(0)">💰 Bank Flex</div>
+<div class="tab" onclick="show(1)">💬 iMessage</div>
+<div class="tab" onclick="show(2)">💖 Soulmate</div>
+</div>
+
+<!-- TAB 1 BANK -->
+<div class="page active" id="p0">
+<div class="box">
+<h3>💰 Fake Bank Balance - For Boys Flex</h3>
+<input id="bankName" placeholder="Your Name" value="Alex Carter">
+<input id="bankBal" placeholder="Balance (e.g. 9,999,999)" value="9,999,999">
+<select id="bankCurr"><option>$ USD</option><option>£ GBP</option><option>₹ INR</option><option>Rs PKR</option></select>
+<button onclick="makeBank()">Generate Flex 💸</button>
+<button onclick="dl('bankBox')" style="background:#fff">📸 Download</button>
+</div>
+<div class="preview" id="bankBox">
+<div class="bank-top"><div style="font-size:12px;opacity:.7">Checking • 4821</div><div id="bankBalOut" style="font-size:32px;font-weight:900;margin-top:10px">$ 9,999,999.00</div><div id="bankNameOut" style="margin-top:8px;font-size:13px">Alex Carter • Available</div></div>
+<div style="padding:10px;font-size:12px;color:#666">Today • Deposit from Business Inc.</div>
+<div class="watermark">formatpure.github.io</div>
+</div>
+</div>
+
+<!-- TAB 2 IMESSAGE -->
+<div class="page" id="p1">
+<div class="box">
+<h3>💬 Fake iPhone iMessage - USA Viral</h3>
+<input id="imName" placeholder="Contact (e.g. Mom ❤️)" value="Mom ❤️" oninput="document.getElementById('imH').innerText=this.value">
+<input type="file" id="imAvatar" accept="image/*">
+<select id="imType"><option value="grey">Received (Grey)</option><option value="blue">Sent (Blue)</option></select>
+<input id="imText" placeholder="Type message">
+<button onclick="addIm()">Add Message</button>
+<button onclick="document.getElementById('imMsgs').innerHTML=''" style="background:#222;color:#fff">Clear</button>
+<button onclick="dl('imBox')" style="background:#000;color:#fff">📸 Download</button>
+</div>
+<div class="preview" id="imBox" style="background:#fff">
+<div style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid #eee"><img id="imImg" src="https://i.pravatar.cc/100?img=1" style="width:32px;height:32px;border-radius:50%"><div id="imH" style="font-weight:bold;font-size:14px">Mom ❤️</div></div>
+<div id="imMsgs" style="display:flex;flex-direction:column;padding:10px;min-height:250px"></div>
+<div class="watermark">formatpure.github.io</div>
+</div>
+</div>
+
+<!-- TAB 3 SOULMATE -->
+<div class="page" id="p2">
+<div class="box">
+<h3>💖 Soulmate Predictor - Girls Addiction</h3>
+<input id="sName" placeholder="Your Name" value="Ayesha">
+<input id="sCrush" placeholder="Crush Name" value="Zayn">
+<input type="date" id="sDob">
+<button onclick="makeSoul()">Predict Future 🔮</button>
+<button onclick="dl('soulBox')" style="background:#ff006a;color:#fff">📸 Download Poster</button>
+</div>
+<div class="preview poster" id="soulBox">
+<div style="font-size:12px;letter-spacing:3px;opacity:.8">FORMATPURE PREDICTION</div>
+<div id="soulInit" style="font-size:80px;font-weight:900;margin:10px 0">A</div>
+<div id="soulText" style="font-size:16px;line-height:1.4">Ayesha + Zayn<br>Marriage Age: 24<br>Delulu Level: 99% 😭<br>Soulmate Vibes: UNMATCHED 💖</div>
+<div style="margin-top:15px;font-size:10px;opacity:.7">Make yours at formatpure.github.io/flexlab.html</div>
+<div class="watermark" style="color:#fff">formatpure</div>
+</div>
+</div>
+
+<a href="vibelab.html" style="color:#38bdf8;display:block;margin:20px">← Back to VibeLab</a>
+<p style="color:#555;font-size:11px">Made with ❤️ by formatpure.github.io - All fakes are for fun only</p>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function show(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('active',k==i))}
+function dl(id){html2canvas(document.getElementById(id)).then(c=>{let a=document.createElement('a');a.download=id+'-formatpure.png';a.href=c.toDataURL();a.click()})}
+function makeBank(){document.getElementById('bankNameOut').innerText=document.getElementById('bankName').value+' • Available';document.getElementById('bankBalOut').innerText=document.getElementById('bankCurr').value.split(' ')[0]+' '+document.getElementById('bankBal').value}
+document.getElementById('imAvatar').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>document.getElementById('imImg').src=ev.target.result;r.readAsDataURL(f)})
+function addIm(){let t=imText.value;if(!t)return;let type=imType.value;let d=document.createElement('div');d.className='imsg-bubble '+(type=='blue'?'imsg-blue':'imsg-grey');d.innerText=t;imMsgs.appendChild(d);imText.value='';imMsgs.scrollTop=9999}
+// soulmate logic
+function makeSoul(){let n=sName.value||'You';let c=sCrush.value||'Crush';let age=22+Math.floor(Math.random()*6);let init=c.charAt(0).toUpperCase();let delu=85+Math.floor(Math.random()*15);document.getElementById('soulInit').innerText=init;document.getElementById('soulText').innerHTML=`${n} + ${c}<br>Marriage Age: ${age}<br>Delulu Level: ${delu}% 😭<br>Soulmate Vibes: UNMATCHED 💖<br><br>You will meet in ${Math.floor(Math.random()*8+1)} months!`}
+makeBank()
+</script>
+</body></html>
