@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PureVault - Forever ID & Certificate Lab by FormatPure</title>
+<style>
+body{margin:0;background:#020208;color:#fff;font-family:Arial;text-align:center}
+header{padding:16px;background:linear-gradient(90deg,#FFD700,#FFA500);color:#000;font-weight:900;font-size:20px}
+.tabs{display:flex;gap:6px;padding:10px;overflow-x:auto;background:#111;position:sticky;top:0;z-index:9}
+.tab{padding:10px 14px;background:#222;border-radius:20px;cursor:pointer;font-weight:bold;white-space:nowrap;font-size:12px}
+.tab.active{background:#FFD700;color:#000}
+.page{display:none;padding:10px}.page.active{display:block}
+.box{background:#151525;padding:14px;border-radius:14px;margin:10px auto;max-width:430px;border:1px solid #333}
+input,select,button{width:93%;padding:11px;margin:5px;border-radius:10px;border:none;font-size:14px}
+button{background:#FFD700;color:#000;font-weight:900;cursor:pointer}
+.preview{width:96%;max-width:390px;margin:14px auto;background:#fff;color:#000;border-radius:12px;overflow:hidden;text-align:left;position:relative;box-shadow:0 0 40px rgba(255,215,0,0.4)}
+.wm{position:absolute;bottom:4px;right:7px;font-size:7px;color:#000;opacity:.4;font-weight:bold;z-index:10}
+.id-top{height:8px;background:linear-gradient(90deg,#FFD700,#FF8C00)}
+.chip{width:32px;height:24px;background:linear-gradient(135deg,#FFD700,#C0C0C0);border-radius:4px;display:inline-block}
+.holo{position:absolute;top:60px;right:10px;width:50px;height:50px;background:radial-gradient(circle,#FFD70055,#00ffff55);border-radius:50%;border:1px dashed #FFD700}
+</style>
+</head><body>
+<header>💳 PURE VAULT - FOREVER <div style="font-size:10px;letter-spacing:2px">OFFICIAL ID & CERTIFICATE - BY FORMATPURE</div></header>
+
+<div class="tabs">
+<div class="tab active" onclick="show(0)">💼 CEO ID</div>
+<div class="tab" onclick="show(1)">✅ VERIFIED ID</div>
+<div class="tab" onclick="show(2)">💰 BILLIONAIRE</div>
+<div class="tab" onclick="show(3)">😎 RIZZ LICENSE</div>
+</div>
+
+<!-- CEO ID -->
+<div class="page active" id="p0">
+<div class="box">
+<h3>💼 CEO ID Card - Forever Flex</h3>
+<input id="ceoName" placeholder="Your Name" value="Bilal Ahmed">
+<input id="ceoRole" placeholder="Role (e.g. CEO of Rizz)" value="CEO of Being Single">
+<input type="file" id="ceoPic" accept="image/*">
+<button onclick="makeCEO()">Generate ID</button>
+<button onclick="dl('ceoBox')">📸 Download HD</button>
+</div>
+<div class="preview" id="ceoBox" style="padding:0">
+<div class="id-top"></div>
+<div style="padding:14px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:900;font-size:12px;color:#000">FORMATPURE CORP<br><span style="font-size:8px;color:#666">EST. 2026 - GLOBAL HQ</span></div><div class="chip"></div></div>
+<div style="display:flex;gap:12px;margin-top:12px">
+<img id="ceoImg" src="https://i.pravatar.cc/200?img=15" style="width:90px;height:105px;object-fit:cover;border-radius:6px;border:1px solid #ddd">
+<div style="flex:1">
+<div id="ceoNameOut" style="font-weight:900;font-size:16px;text-transform:uppercase">BILAL AHMED</div>
+<div id="ceoRoleOut" style="font-size:11px;background:#FFD700;display:inline-block;padding:2px 6px;border-radius:4px;margin-top:4px;font-weight:bold">CEO OF BEING SINGLE</div>
+<div style="font-size:9px;margin-top:10px;line-height:1.4">ID: FP-CEO-<span id="ceoId">8842</span><br>Valid: LIFETIME<br>Access: ALL AREAS</div>
+</div>
+</div>
+<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:7px">www.formatpure.github.io<br>OFFICIAL ID - NOT FOR GOVT USE</div><div style="font-family:cursive;font-size:12px">FormatPure</div></div>
+</div>
+<div class="holo"></div>
+<div class="wm">formatpure.github.io</div>
+</div>
+</div>
+
+<!-- VERIFIED -->
+<div class="page" id="p1">
+<div class="box">
+<h3>✅ Instagram Verified ID</h3>
+<input id="vName" placeholder="Name" value="Ayesha Khan">
+<input id="vUser" placeholder="Username" value="@ayesha.khan">
+<input type="file" id="vPic" accept="image/*">
+<button onclick="makeV()">Generate Verified ID</button>
+<button onclick="dl('vBox')">📸 Download</button>
+</div>
+<div class="preview" id="vBox" style="padding:14px;background:linear-gradient(135deg,#f9f9f9,#fff)">
+<div style="display:flex;gap:12px;align-items:center">
+<img id="vImg" src="https://i.pravatar.cc/200?img=5" style="width:70px;height:70px;border-radius:50%;border:3px solid #0095f6">
+<div>
+<div style="display:flex;align-items:center;gap:5px"><span id="vNameOut" style="font-weight:900;font-size:15px">Ayesha Khan</span><span style="background:#0095f6;color:#fff;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span></div>
+<div id="vUserOut" style="font-size:12px;color:#555">@ayesha.khan</div>
+<div style="font-size:9px;margin-top:4px;background:#000;color:#fff;padding:2px 6px;border-radius:10px;display:inline-block">VERIFIED BY FORMATPURE</div>
+</div>
+</div>
+<div style="margin-top:12px;font-size:10px;border-top:1px solid #eee;padding-top:8px">This certifies this user is officially too attractive for Instagram. Handle with care.<br><br>ID: FP-VER-<span id="vId">2219</span> • formatpure.github.io</div>
+<div class="wm">formatpure.github.io</div>
+</div>
+</div>
+
+<!-- BILLIONAIRE CERT -->
+<div class="page" id="p2">
+<div class="box">
+<h3>💰 Billionaire Certificate</h3>
+<input id="bName" placeholder="Name" value="Zayn Ali">
+<input id="bAmount" placeholder="Net Worth" value="$0 but 100% Attitude">
+<button onclick="makeB()">Generate Certificate</button>
+<button onclick="dl('bBox')">📸 Download</button>
+</div>
+<div class="preview" id="bBox" style="padding:0;border:4px double #FFD700;text-align:center">
+<div style="padding:16px">
+<div style="font-size:10px;letter-spacing:3px">FORMATPURE GLOBAL BANK</div>
+<div style="font-size:22px;font-weight:900;margin:10px 0;font-family:serif">CERTIFICATE OF BEING RICH</div>
+<div style="width:40px;height:2px;background:#FFD700;margin:0 auto"></div>
+<div style="margin:15px 0;font-size:12px">This is to certify that</div>
+<div id="bNameOut" style="font-size:20px;font-weight:900;font-family:serif">ZAYN ALI</div>
+<div style="margin:10px 0;font-size:12px">is officially recognized with a net worth of</div>
+<div id="bAmountOut" style="font-size:16px;font-weight:900;color:#B8860B">$0 BUT 100% ATTITUDE</div>
+<div style="margin-top:15px;font-size:9px">Issued on 16-09-2026 • Certificate No: FP-BIL-<span id="bId">7731</span><br>formatpure.github.io - Official Flex Document</div>
+<div style="display:flex;justify-content:space-around;margin-top:15px"><div>________________<br><span style="font-size:8px">Governor</span></div><div>________________<br><span style="font-size:8px">FormatPure</span></div></div>
+</div>
+<div class="wm">formatpure.github.io</div>
+</div>
+</div>
+
+<!-- RIZZ LICENSE -->
+<div class="page" id="p3">
+<div class="box">
+<h3>😎 Rizz License - Valid Till 2099</h3>
+<input id="rName" placeholder="Name" value="Bilal Ahmed">
+<select id="rLevel"><option>100% Rizz - Certified Lover Boy</option><option>0% Rizz - Needs Training</option><option>Illegal Rizz - Too Dangerous</option></select>
+<input type="file" id="rPic" accept="image/*">
+<button onclick="makeR()">Generate License</button>
+<button onclick="dl('rBox')">📸 Download</button>
+</div>
+<div class="preview" id="rBox" style="padding:0;background:#000;color:#fff">
+<div style="background:#FFD700;color:#000;padding:6px;text-align:center;font-weight:900;font-size:11px;letter-spacing:2px">RIZZ LICENSE - GOVT OF FORMATPURE</div>
+<div style="padding:12px;display:flex;gap:12px">
+<img id="rImg" src="https://i.pravatar.cc/200?img=8" style="width:80px;height:95px;object-fit:cover;border:2px solid #FFD700">
+<div style="flex:1;font-size:10px;line-height:1.5">
+<b>Name:</b> <span id="rNameOut">BILAL AHMED</span><br>
+<b>Level:</b> <span id="rLevelOut" style="color:#FFD700">100% Rizz - Certified Lover Boy</span><br>
+<b>License No:</b> FP-RIZZ-<span id="rId">5521</span><br>
+<b>Valid Till:</b> 31-12-2099<br>
+<b>Restriction:</b> Can make anyone blush<br><br>
+<div style="font-size:8px;opacity:.6">This license permits holder to flirt legally. Misuse will result in being left on seen.</div>
+</div>
+</div>
+<div class="wm" style="color:#fff">formatpure.github.io</div>
+</div>
+</div>
+
+<a href="index.html" style="color:#FFD700;display:block;margin:20px;text-decoration:none">🏠 Back to FormatPure Home - All Tools</a>
+<p style="color:#666;font-size:10px">All IDs are FAKE for fun. Forever Tool by formatpure.github.io</p>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function show(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('active',k==i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('active',k==i))}
+function dl(id){html2canvas(document.getElementById(id),{scale:3}).then(c=>{let a=document.createElement('a');a.download=id+'-formatpure.png';a.href=c.toDataURL();a.click()})}
+function bindPic(inputId,imgId){document.getElementById(inputId).addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>document.getElementById(imgId).src=ev.target.result;r.readAsDataURL(f)})}
+bindPic('ceoPic','ceoImg');bindPic('vPic','vImg');bindPic('rPic','rImg');
+function makeCEO(){document.getElementById('ceoNameOut').innerText=document.getElementById('ceoName').value;document.getElementById('ceoRoleOut').innerText=document.getElementById('ceoRole').value.toUpperCase();document.getElementById('ceoId').innerText=Math.floor(1000+Math.random()*9000)}
+function makeV(){document.getElementById('vNameOut').innerText=document.getElementById('vName').value;document.getElementById('vUserOut').innerText=document.getElementById('vUser').value;document.getElementById('vId').innerText=Math.floor(1000+Math.random()*9000)}
+function makeB(){document.getElementById('bNameOut').innerText=document.getElementById('bName').value;document.getElementById('bAmountOut').innerText=document.getElementById('bAmount').value;document.getElementById('bId').innerText=Math.floor(1000+Math.random()*9000)}
+function makeR(){document.getElementById('rNameOut').innerText=document.getElementById('rName').value;document.getElementById('rLevelOut').innerText=document.getElementById('rLevel').value;document.getElementById('rId').innerText=Math.floor(1000+Math.random()*9000)}
+makeCEO();makeV();makeB();makeR()
+</script>
+</body></html>
