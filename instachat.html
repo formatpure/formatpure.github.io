@@ -76,9 +76,14 @@ document.getElementById('instaMessages').appendChild(seen);
 document.getElementById('instaText').value='';
 document.getElementById('instaMessages').scrollTop=9999;
 }
-function downloadChat(){
+ function downloadChat(){
+  if(!document.getElementById('agree').checked){
+    alert("Please tick checkbox - Agree for fun only");
+    return;
+  }
   html2canvas(document.getElementById('chatBox'), {scale:2}).then(canvas => {
-    const ctx = canvas.getContext('2d');
+  
+  const ctx = canvas.getContext('2d');
     
     // Footer watermark - 100% safe for 10 years
     ctx.fillStyle = "rgba(0,0,0,0.8)";
