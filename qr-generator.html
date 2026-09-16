@@ -3,39 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR Code Generator - FormatPure</title>
+<title>All QR Generator - FormatPure</title>
 <style>
 body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
-.container{max-width:500px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
+.box{max-width:520px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
 h1{color:#38bdf8}
-input{width:90%;padding:12px;border-radius:8px;border:0;margin:10px 0;font-size:16px}
-button{background:#38bdf8;color:#000;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0;font-size:16px}
-#qr{background:#fff;padding:15px;border-radius:10px;display:inline-block;margin:15px 0;min-height:260px}
+select,input,textarea{width:92%;padding:12px;border-radius:8px;border:0;margin:6px 0;font-size:15px}
+button{background:#38bdf8;color:#000;border:0;padding:13px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0}
+#qr{background:#fff;padding:15px;border-radius:10px;display:inline-block;margin:15px 0}
 #qr img{width:250px;height:250px}
+.grp{display:none}
 </style>
 </head>
 <body>
-<div class="container">
-<h1>QR Code Generator</h1>
-<p>Create QR for link, text, WhatsApp - Free</p>
-<input id="text" placeholder="Paste link or text here...">
-<button onclick="makeQR()">Generate QR Code</button>
-<div><div id="qr"></div></div>
-<button onclick="downloadQR()" style="background:#22c55e">Download PNG</button>
-<a href="index.html" style="color:#38bdf8;display:block;margin-top:15px">← Back to Home</a>
+<div class="box">
+<h1>All QR Generator</h1>
+<select id="type" onchange="show()">
+<option value="text">Text / Link</option>
+<option value="wifi">WiFi</option>
+<option value="whatsapp">WhatsApp Chat</option>
+<option value="tel">Phone Call</option>
+<option value="sms">SMS</option>
+<option value="email">Email</option>
+<option value="vcard">Contact Card (vCard)</option>
+</select>
+
+<div id="g-text" class="grp" style="display:block"><textarea id="in-text" rows="3" placeholder="Enter text or https://..."></textarea></div>
+
+<div id="g-wifi" class="grp">
+<input id="wifi-s" placeholder="WiFi Name (SSID)">
+<input id="wifi-p" placeholder="Password">
+<select id="wifi-t"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Password</option></select>
 </div>
+
+<div id="g-whatsapp" class="grp"><input id="wa-n" placeholder="923001234567"><input id="wa-m" placeholder="Message (optional)"></div>
+<div id="g-tel" class="grp"><input id="tel-n" placeholder="+923001234567"></div>
+<div id="g-sms" class="grp"><input id="sms-n" placeholder="Phone number"><input id="sms-m" placeholder="Message"></div>
+<div id="g-email" class="grp"><input id="em-a" placeholder="email@example.com"><input id="em-s" placeholder="Subject"><input id="em-b" placeholder="Body"></div>
+<div id="g-vcard" class="grp">
+<input id="vc-n" placeholder="Full Name"><input id="vc-p" placeholder="Phone"><input id="vc-e" placeholder="Email">
+</div>
+
+<button onclick="gen()">Generate QR</button>
+<div><div id="qr"><span style="color:#666">QR will appear here</span></div></div>
+<button onclick="dl()" style="background:#22c55e">Download PNG</button>
+<br><a href="index.html" style="color:#38bdf8">← Back</a>
+</div>
+
 <script>
-function makeQR(){
-  const val=document.getElementById('text').value.trim();
-  if(!val) return alert('Enter text first');
-  const url='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+encodeURIComponent(val);
-  document.getElementById('qr').innerHTML='<img id="qrImg" src="'+url+'">';
+function show(){
+ document.querySelectorAll('.grp').forEach(e=>e.style.display='none');
+ document.getElementById('g-'+document.getElementById('type').value).style.display='block';
 }
-function downloadQR(){
-  const img=document.getElementById('qrImg');
-  if(!img) return alert('Generate first');
-  window.open(img.src,'_blank');
+function gen(){
+ const t=document.getElementById('type').value; let v='';
+ if(t=='text') v=document.getElementById('in-text').value.trim();
+ if(t=='wifi'){const s=document.getElementById('wifi-s').value.trim(),p=document.getElementById('wifi-p').value,sec=document.getElementById('wifi-t').value; if(!s)return alert('Enter SSID'); v=`WIFI:T:${sec};S:${s};P:${p};;`;}
+ if(t=='whatsapp'){let n=document.getElementById('wa-n').value.replace(/\D/g,''); let m=encodeURIComponent(document.getElementById('wa-m').value); if(!n)return alert('Enter number'); v=`https://wa.me/${n}`+(m?`?text=${m}`:'');}
+ if(t=='tel'){let n=document.getElementById('tel-n').value.trim(); v=`tel:${n}`;}
+ if(t=='sms'){let n=document.getElementById('sms-n').value.trim(),m=encodeURIComponent(document.getElementById('sms-m').value); v=`SMSTO:${n}:${decodeURIComponent(m)}`;}
+ if(t=='email'){let a=document.getElementById('em-a').value,s=document.getElementById('em-s').value,b=document.getElementById('em-b').value; v=`mailto:${a}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`;}
+ if(t=='vcard'){let n=document.getElementById('vc-n').value,p=document.getElementById('vc-p').value,e=document.getElementById('vc-e').value; v=`BEGIN:VCARD\nVERSION:3.0\nFN:${n}\nTEL:${p}\nEMAIL:${e}\nEND:VCARD`;}
+ if(!v) return alert('Fill data');
+ document.getElementById('qr').innerHTML=`<img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(v)}">`;
 }
+function dl(){const i=document.getElementById('qrImg'); if(!i) return alert('Generate first'); window.open(i.src,'_blank');}
 </script>
 </body>
 </html>
