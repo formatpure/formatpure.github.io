@@ -45,7 +45,7 @@ fileInput.addEventListener('change', e=>{
 
 window.removeBg = async ()=>{
   if(!fileBlob) return alert('Upload image first');
-  document.getElementById('status').innerText='Removing background... please wait';
+  document.getElementById('status').innerText='Removing background...it takes 1min50secs please wait';
   resultBlob = await removeBackground(fileBlob);
   document.getElementById('result').src = URL.createObjectURL(resultBlob);
   document.getElementById('result').style.display='block';
