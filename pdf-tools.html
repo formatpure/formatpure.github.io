@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Toolkit - FormatPure</title>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
+.container{max-width:600px;margin:auto;background:#1e293b;padding:20px;border-radius:12px}
+h1{color:#38bdf8}
+.drop{border:2px dashed #38bdf8;padding:30px;border-radius:10px;margin:20px 0;cursor:pointer}
+button{background:#38bdf8;color:#000;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:8px 0;font-size:16px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>PDF Toolkit</h1>
+<p>Merge PDF • Images to PDF - 100% Free</p>
+
+<div class="drop" onclick="document.getElementById('file').click()">
+Click or Drop PDFs / Images Here
+<input type="file" id="file" multiple accept=".pdf,image/*" hidden>
+</div>
+<p id="list"></p>
+
+<button onclick="mergePDF()">Merge to One PDF</button>
+<button onclick="imagesToPDF()" style="background:#a78bfa">Images to PDF</button>
+<a href="index.html" style="color:#38bdf8;display:block;margin-top:15px">← Back to Home</a>
+</div>
+
+<script>
+let files=[];
+document.getElementById('file').addEventListener('change', e=>{
+  files=[...e.target.files];
+  document.getElementById('list').innerText=files.length+' files selected: '+files.map(f=>f.name).join(', ');
+});
+
+async function mergePDF(){
+  if(files.length<2) return alert('Select at least 2 PDFs');
+  const merged = await PDFLib.PDFDocument.create();
+  for(let f of files){
+    if(f.type!=='application/pdf') continue;
+    const buf=await f.arrayBuffer();
+    const pdf=await PDFLib.PDFDocument.load(buf);
+    const pages=await merged.copyPages(pdf, pdf.getPageIndices());
+    pages.forEach(p=>merged.addPage(p));
+  }
+  const out=await merged.save();
+  download(out,'formatpure-merged.pdf');
+}
+
+async function imagesToPDF(){
+  const imgs=files.filter(f=>f.type.startsWith('image/'));
+  if(!imgs.length) return alert('Select images');
+  const pdf=await PDFLib.PDFDocument.create();
+  for(let f of imgs){
+    const buf=await f.arrayBuffer();
+    let img;
+    if(f.type.includes('png')) img=await pdf.embedPng(buf);
+    else img=await pdf.embedJpg(buf);
+    const page=pdf.addPage([img.width, img.height]);
+    page.drawImage(img,{x:0,y:0,width:img.width,height:img.height});
+  }
+  const out=await pdf.save();
+  download(out,'formatpure-images.pdf');
+}
+
+function download(data,name){
+  const blob=new Blob([data],{type:'application/pdf'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=name; a.click();
+}
+</script>
+</body>
+</html>
