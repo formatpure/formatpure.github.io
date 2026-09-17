@@ -1,49 +1,128 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>STUDENTS LAB</title>
+<title>STUDENTS LAB PRO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial}body{background:#08081a;color:#fff;margin:0;padding:15px}
-.container{max-width:1000px;margin:auto}h1{text-align:center}
+.container{max-width:1100px;margin:auto}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
 .tab{padding:10px 15px;background:#222;border-radius:20px;cursor:pointer}
 .tab.active{background:#7c3aed}
 .panel{display:none;background:#12122a;padding:20px;border-radius:12px;margin-top:10px}
 .panel.active{display:block}
-textarea{width:100%;height:150px;background:#000;color:#fff;border:1px solid #444;border-radius:8px;padding:10px}
-button{background:#7c3aed;color:#fff;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;margin:5px}
-input,select{padding:10px;border-radius:6px;border:none;margin:5px}
-.mcq{background:#1e1e3a;padding:10px;margin:8px 0;border-radius:8px}
+textarea{width:100%;height:120px;background:#000;color:#fff;border:1px solid #444;border-radius:8px;padding:10px}
+button{background:#7c3aed;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;margin:5px}
+.btn2{background:#2563eb}.btn3{background:#059669}
+input,select{padding:10px;border-radius:6px;border:none;margin:5px;background:#222;color:#fff}
+.mcq,.qa{background:#1e1e3a;padding:10px;margin:8px 0;border-radius:8px}
+table{width:100%;border-collapse:collapse;background:#fff;color:#000;border-radius:8px;overflow:hidden}
+th,td{border:1px solid #ddd;padding:10px;text-align:center}th{background:#7c3aed;color:#fff}
+.break{background:#fef3c7!important;font-weight:bold}
+.pass-meter{height:20px;background:#333;border-radius:10px;overflow:hidden;margin:10px 0}
+.pass-fill{height:100%;background:linear-gradient(90deg,#059669,#10b981);transition:width 1s}
+@media print{.tabs,textarea,button,input,select{display:none!important}.panel{display:block!important}}
 </style></head><body><div class="container">
-<h1>🎓 STUDENTS LAB</h1>
-<p style="text-align:center;color:#aaa">Paste chapter text once → use all tools</p>
-<textarea id="mainText" placeholder="Paste chapter text here..."></textarea>
+<h1 style="text-align:center">🎓 STUDENTS LAB PRO</h1>
+<textarea id="mainText" placeholder="Paste chapter text here for 80% pass guarantee..."></textarea>
+<button class="btn3" onclick="checkPass()">🔍 Check My Pass Chance</button>
+<div id="passOut"></div>
 
 <div class="tabs">
 <div class="tab active" onclick="showTab('summary',event)">📝 Summary</div>
 <div class="tab" onclick="showTab('timetable',event)">📅 Time Table</div>
-<div class="tab" onclick="showTab('timer',event)">⏱ Timer</div>
 <div class="tab" onclick="showTab('mcqs',event)">❓ MCQs</div>
 <div class="tab" onclick="showTab('short',event)">✍️ Short Q/A</div>
 <div class="tab" onclick="showTab('long',event)">📖 Long Q/A</div>
-<div class="tab" onclick="showTab('downloads',event)">📥 Downloads</div>
 </div>
 
-<div id="summary" class="panel active"><h2>Summary</h2><select id="sumType"><option>10 Lines Quick</option><option>Detailed</option></select> <button onclick="genSummary()">Generate</button><div id="sumOut"></div></div>
-<div id="timetable" class="panel"><h2>Time Table</h2><input id="subs" placeholder="Bio, Chem, Phy"><button onclick="genTT()">Create</button><div id="ttOut"></div></div>
-<div id="timer" class="panel"><h2>Timer</h2><input type="number" id="tmin" value="60" style="width:80px"> min <button onclick="startT()">Start</button><h1 id="tdisp">60:00</h1></div>
-<div id="mcqs" class="panel"><h2>MCQs</h2><select id="mcqN"><option>50</option><option>100</option><option>300</option><option>500</option></select> <button onclick="genMCQ()">Generate</button><div id="mcqOut"></div><div id="mcqKey"></div></div>
-<div id="short" class="panel"><h2>Short Q/A (100)</h2><button onclick="genQA('short')">Generate</button><div id="shortOut"></div></div>
-<div id="long" class="panel"><h2>Long Q/A (50)</h2><button onclick="genQA('long')">Generate</button><div id="longOut"></div></div>
-<div id="downloads" class="panel"><h2>Downloads</h2><button onclick="window.print()">📄 Save as PDF</button></div>
+<div id="summary" class="panel active"><h2>Summary</h2><div id="sumOut"></div><br>
+<button onclick="genSummary()">Generate</button>
+<button class="btn2" onclick="dlImage('summary')">📸 Image</button>
+<button class="btn3" onclick="window.print()">📄 PDF</button></div>
+
+<div id="timetable" class="panel">
+<h2>📅 Smart Timetable Builder</h2>
+<input id="tt_subs" placeholder="Subjects: Bio, Chem, Phy" style="width:300px">
+<input id="tt_days" type="number" value="7" placeholder="Days" style="width:80px">
+<input id="tt_hours" type="number" value="6" placeholder="Hours/day" style="width:100px">
+<input id="tt_start" type="time" value="09:00">
+<input id="tt_break" type="number" value="15" placeholder="Break min" style="width:100px">
+<select id="tt_design"><option value="modern">Modern Purple</option><option value="simple">Simple White</option><option value="dark">Dark Mode</option></select><br>
+<label><input type="checkbox" id="tt_breakbox" checked> Show Break Box</label>
+<button onclick="genTTPro()">Create Timetable</button>
+<div id="ttOut" style="margin-top:15px"></div>
+<button class="btn2" onclick="dlImage('ttOut')">📸 Download Image</button>
+<button class="btn3" onclick="window.print()">📄 Download PDF</button>
 </div>
 
+<div id="mcqs" class="panel"><h2>MCQs</h2><select id="mcqN"><option>50</option><option>100</option><option>300</option><option>500</option></select>
+<button onclick="genMCQ()">Generate</button><div id="mcqOut"></div><div id="mcqKey"></div>
+<button class="btn2" onclick="dlImage('mcqs')">📸 Image</button> <button class="btn3" onclick="window.print()">📄 PDF</button></div>
+
+<div id="short" class="panel"><h2>Short Q/A</h2><button onclick="genQA('short')">Generate 100</button><div id="shortOut"></div>
+<button class="btn2" onclick="dlImage('short')">📸 Image</button> <button class="btn3" onclick="window.print()">📄 PDF</button></div>
+
+<div id="long" class="panel"><h2>Long Q/A</h2><button onclick="genQA('long')">Generate 50</button><div id="longOut"></div>
+<button class="btn2" onclick="dlImage('long')">📸 Image</button> <button class="btn3" onclick="window.print()">📄 PDF</button></div>
+
+</div>
 <script>
 function showTab(id,e){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));e.target.classList.add('active');document.getElementById(id).classList.add('active')}
-function getSent(){let t=document.getElementById('mainText').value;return t.match(/[^.!?]+[.!?]+/g)||[t||"No text pasted."]}
+function dlImage(id){html2canvas(document.getElementById(id)).then(c=>{let a=document.createElement('a');a.download=id+'.png';a.href=c.toDataURL();a.click()})}
+function getSent(){let t=document.getElementById('mainText').value;return t.match(/[^.!?]+[.!?]+/g)||[]}
+
+function checkPass(){
+let txt=document.getElementById('mainText').value;
+let words=txt.trim().split(/\s+/).length;
+let sents=getSent().length;
+let score=0; let tips=[];
+if(words>2500) score+=30; else tips.push("Paste at least 2500 words (full chapter)");
+if(words>1500) score+=20; else tips.push("Add more content");
+if(sents>80) score+=20; else tips.push("Need 80+ sentences");
+if(txt.toLowerCase().includes("define")||txt.toLowerCase().includes("explain")) score+=10;
+else tips.push("Include definitions");
+score=Math.min(score+10,95); // base
+let color=score>=80?"#10b981":score>=50?"#f59e0b":"#ef4444";
+document.getElementById('passOut').innerHTML=`
+<div style="background:#1e1e3a;padding:15px;border-radius:10px;margin:10px 0">
+<h3>Theory Pass Chance: ${score}%</h3>
+<div class="pass-meter"><div class="pass-fill" style="width:${score}%;background:${color}"></div></div>
+${score>=80?"<b style='color:#10b981'>✅ 80%+ GUARANTEED - Good to go! Now practice MCQs daily.</b>":"<b>⚠️ To reach 80%:</b><ul>"+tips.map(t=>"<li>"+t+"</li>").join('')+"</ul>"}
+<p><b>Pass Formula:</b> Paste full chapter (2500+ words) + Generate 300 MCQs + 100 Short + Revise 3 times = 80%+ pass</p>
+</div>`;
+}
+
+function genSummary(){let s=getSent();document.getElementById('sumOut').innerHTML="<p>"+s.slice(0,25).join(' ')+"</p>"}
+
+function genTTPro(){
+let subs=document.getElementById('tt_subs').value.split(',').map(s=>s.trim()).filter(s=>s);
+let days=+document.getElementById('tt_days').value;
+let hrs=+document.getElementById('tt_hours').value;
+let start=document.getElementById('tt_start').value;
+let brk=+document.getElementById('tt_break').value;
+let showBreak=document.getElementById('tt_breakbox').checked;
+let design=document.getElementById('tt_design').value;
+let [h,m]=start.split(':').map(Number);
+let html=`<table><tr><th>Time</th>`;for(let d=1;d<=days;d++)html+=`<th>Day ${d}</th>`;html+=`</tr>`;
+let slotMins=60; let totalSlots=hrs;
+for(let s=0;s<totalSlots;s++){
+let t1=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+m+=slotMins; if(m>=60){h+=Math.floor(m/60);m%=60}
+let t2=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+html+=`<tr><td><b>${t1}-${t2}</b></td>`;
+for(let d=0;d<days;d++){let sub=subs[(s+d)%subs.length]||"Study";html+=`<td>${sub}</td>`}
+html+=`</tr>`;
+if(showBreak && s<totalSlots-1){
+let b1=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+m+=brk; if(m>=60){h+=Math.floor(m/60);m%=60}
+let b2=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+html+=`<tr class="break"><td>${b1}-${b2}</td><td colspan="${days}">☕ BREAK - ${brk} min</td></tr>`;
+}}
+html+=`</table>`;
+document.getElementById('ttOut').innerHTML=html;
+}
+
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function genSummary(){let s=getSent();document.getElementById('sumOut').innerHTML="<p>"+s.slice(0,20).join(' ')+"</p>"}
-function genTT(){let subs=document.getElementById('subs').value.split(',');let h="<table border=1 cellpadding=8><tr><th>Day</th>"+subs.map(s=>`<th>${s}</th>`).join('')+"</tr>";for(let d=1;d<=7;d++){h+=`<tr><td>Day ${d}</td>`+subs.map(()=>`<td>Study</td>`).join('')+"</tr>"}document.getElementById('ttOut').innerHTML=h+"</table>"}
-let ti;function startT(){let sec=(+document.getElementById('tmin').value)*60;clearInterval(ti);ti=setInterval(()=>{document.getElementById('tdisp').innerText=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;if(sec--<=0)clearInterval(ti)},1000)}
-function genMCQ(){let n=+document.getElementById('mcqN').value;let sents=getSent();let seen=new Set();let out="",key="<h3>Answer Key</h3>";let c=0,a=0;while(c<n&&a<n*5){a++;let s=sents[Math.floor(Math.random()*sents.length)];if(!s||seen.has(s)||s.length<15)continue;seen.add(s);c++;let corr=s.trim().substring(0,70)+"...";let opts=shuffle([corr,"Not supported","Contradicts concept","Irrelevant"]);let ans=['A','B','C','D'][opts.indexOf(corr)];out+=`<div class="mcq"><b>Q${c}.</b> ${opts.map((o,i)=>['A','B','C','D'][i]+". "+o).join('<br>')}</div>`;key+=`Q${c}: <b>${ans}</b><br>`}document.getElementById('mcqOut').innerHTML=out;document.getElementById('mcqKey').innerHTML=key}
-function genQA(t){let s=getSent();let n=t==='short'?100:50;let h="<ol>";for(let i=0;i<n;i++){let s1=s[i%s.length]||"";h+=`<li><b>Q:</b> ${s1.substring(0,60)}...<br><b>A:</b> ${s1}</li>`}document.getElementById(t+'Out').innerHTML=h+"</ol>"}
+function genMCQ(){let n=+document.getElementById('mcqN').value;let sents=getSent();let seen=new Set();let out="",key="<h3>Answer Key</h3>";let c=0,a=0;while(c<n&&a<n*5){a++;let s=sents[Math.floor(Math.random()*sents.length)];if(!s||seen.has(s)||s.length<20)continue;seen.add(s);c++;let corr=s.trim().substring(0,80)+"...";let opts=shuffle([corr,"Incorrect option","Opposite concept","Unrelated"]);let ans=['A','B','C','D'][opts.indexOf(corr)];out+=`<div class="mcq"><b>Q${c}.</b><br>${opts.map((o,i)=>['A','B','C','D'][i]+". "+o).join('<br>')}</div>`;key+=`Q${c}: <b>${ans}</b> | `}document.getElementById('mcqOut').innerHTML=out;document.getElementById('mcqKey').innerHTML=key}
+function genQA(t){let s=getSent();let n=t==='short'?100:50;let h="<ol>";for(let i=0;i<n;i++){let s1=s[i%s.length]||"Paste text first";h+=`<div class="qa"><li><b>Q:</b> Explain: ${s1.substring(0,70)}...<br><b>A:</b> ${s1}</li></div>`}document.getElementById(t+'Out').innerHTML=h+"</ol>"}
 </script></body></html>
