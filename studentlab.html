@@ -1,104 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Students Lab PRO - The New World</title>
+<title>Students Lab ULTRA PRO | FormatPure</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-body{background:#020617;color:white;font-family:sans-serif;padding:12px}
-input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #334155;background:#0f172a;color:white}
-button{padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:6px}
-.glass{background:linear-gradient(135deg,#1e1b4b,#312e81);padding:15px;border-radius:16px;border:1px solid #4f46e5;margin-top:10px}
-.hidden{display:none}
-.flash{background:#fef3c7;color:#000;padding:12px;border-radius:10px;margin:8px 0;border-left:4px solid #f59e0b}
+:root{--bg:#020617;--card:#0f172a;--line:#1e293b;--pri:#6366f1;--ok:#10b981}
+body{background:var(--bg);color:white;font-family:Inter,sans-serif;margin:0;padding:0}
+.top{background:linear-gradient(135deg,#312e81,#1e1b4b);padding:18px;text-align:center;border-bottom:1px solid #4f46e5;position:sticky;top:0;z-index:10}
+textarea,input,select{width:100%;padding:12px;background:#020617;border:1px solid #334155;border-radius:10px;color:white;margin:6px 0;box-sizing:border-box}
+button{padding:12px 14px;border:none;border-radius:10px;font-weight:800;cursor:pointer}
+.pro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.pro-grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px}
+.badge{background:#1e1b4b;color:#a5b4fc;padding:4px 8px;border-radius:20px;font-size:10px;border:1px solid #4f46e5}
+.mcq{border-left:4px solid var(--pri);background:#020617;padding:12px;border-radius:8px;margin:8px 0;font-size:13px}
+.timerBig{font-size:42px;text-align:center;font-weight:900;letter-spacing:2px}
 </style>
 </head>
 <body>
-
-<!-- OUTSIDE - SIMPLE LOOK -->
-<div id="gate">
-<h2 style="text-align:center">📚 Students Lab</h2>
-<p style="text-align:center;color:#94a3b8;font-size:12px">Paste your messy notes / AI text here...</p>
-<textarea id="mainInput" rows="4" placeholder="Paste your chapter, AI essay, or messy text here..."></textarea>
-<button style="background:#6366f1;color:white;font-size:16px" onclick="enterWorld()">✨ Enter New World →</button>
-<p style="text-align:center;font-size:10px;color:#475569">Looks simple? Click and see magic</p>
+<div class="top">
+<h2 style="margin:0">📚 STUDENTS LAB ULTRA PRO</h2>
+<p style="font-size:11px;color:#a5b4fc;margin:4px">The Backbone Tool - 1000 Words • 300 MCQs • Full Timetable • All Downloads</p>
 </div>
 
-<!-- INSIDE - NEW WORLD -->
-<div id="world" class="hidden">
-<h2 style="text-align:center">😱 WELCOME TO NEW WORLD</h2>
-<p style="text-align:center;color:#a5b4fc;font-size:11px">7 PRO Tools Unlocked From Your Text</p>
-
-<div class="glass">
-<h4>🧠 1. Memory Cards - Remember Anything</h4>
-<button style="background:#f59e0b;color:black" onclick="makeFlash()">Generate Flashcards to Memorize</button>
-<div id="flashOut"></div>
+<div class="card">
+<h3>1. PASTE YOUR FULL CHAPTER (1000+ Words Supported)</h3>
+<textarea id="mainText" rows="7" placeholder="Paste your full chapter, book page, AI essay, or notes here... 1000 words or 5000 words, no limit..."></textarea>
+<div class="pro-grid">
+<select id="mcqCount"><option value="50">50 MCQs</option><option value="100">100 MCQs</option><option value="200">200 MCQs</option><option value="300" selected>300 MCQs - ULTRA</option></select>
+<select id="sumLen"><option value="3">Summary: 3 Lines</option><option value="10" selected>Summary: 10 Lines (1000 words)</option><option value="30">Full Detailed Summary</option></select>
+</div>
+<button style="background:var(--pri);color:white;width:100%;font-size:16px;margin-top:8px" onclick="activateLab()">🚀 GENERATE FULL LAB →</button>
 </div>
 
-<div class="glass">
-<h4>📝 2. AI to Human - Bypass Detector (10 Year Tool)</h4>
-<button style="background:#10b981" onclick="humanize()">Make it 100% Human + No AI Detected</button>
-<textarea id="humanOut" rows="3" placeholder="Humanized text will appear here..."></textarea>
+<div id="labArea" style="display:none">
+
+<div class="card">
+<div style="display:flex;justify-content:space-between"><h3>🧠 MCQ GENERATOR <span class="badge" id="mcqBadge">0 MCQs</span></h3><button style="background:white;color:black;padding:6px 10px;font-size:11px" onclick="downloadMCQ()">📥 Download MCQs PDF</button></div>
+<div id="mcqOut" style="max-height:500px;overflow:auto"></div>
 </div>
 
-<div class="glass">
-<h4>📊 3. Paper / Quiz Generator - Exam Ready</h4>
-<button style="background:#0ea5e9" onclick="makeQuiz()">Generate 5 MCQs From Your Text</button>
-<div id="quizOut"></div>
+<div class="pro-grid">
+<div class="card">
+<h3>📝 Main Summary (1000 Words)</h3>
+<div id="sumOut" style="background:#020617;padding:12px;border-radius:10px;font-size:13px;line-height:1.6;min-height:100px"></div>
+<button style="background:var(--ok);width:100%;margin-top:8px" onclick="downloadText('sumOut','Summary')">Download Summary</button>
 </div>
 
-<div class="glass">
-<h4>⚡ 4. Summarizer + GPA + Pomodoro</h4>
+<div class="card">
+<h3>⏱️ Custom Focus Timer</h3>
 <div style="display:flex;gap:6px">
-<button style="background:#334155;flex:1" onclick="summarize()">Summarize in 3 Lines</button>
-<button style="background:#334155;flex:1" onclick="startPomo()">Start 25 Min Focus Timer</button>
+<input id="customMin" type="number" placeholder="Minutes: 3 to 180" value="25">
+<button style="background:#f59e0b;color:black;flex:1" onclick="setCustomTimer()">Start</button>
+<button style="background:#334155;color:white" onclick="stopTimer()">Stop</button>
 </div>
-<p id="sumOut" style="color:#fde68a;font-size:13px"></p>
-<h3 id="pomo" style="text-align:center;display:none">25:00 ⏳ Focusing...</h3>
+<div id="timerDisplay" class="timerBig">25:00</div>
+<p style="font-size:10px;text-align:center;color:gray">Set 3 min for quick revision or 180 min (3hr) for full paper</p>
+</div>
 </div>
 
-<div class="glass" style="text-align:center;border:1px dashed #6366f1">
-<p style="font-size:11px">🔥 PRO TIP: Save this page - Works offline - No login</p>
-<button style="background:white;color:black" onclick="location.reload()">🔄 Paste New Chapter</button>
+<div class="card">
+<h3>🗓️ PRO TIMETABLE MAKER + DOWNLOAD</h3>
+<div class="pro-grid">
+<input id="sub1" placeholder="Monday: Math, Physics"><input id="sub2" placeholder="Tuesday: Chemistry, English">
+<input id="sub3" placeholder="Wednesday: Bio, Urdu"><input id="sub4" placeholder="Thursday: Computer, Islamiat">
+</div>
+<button style="background:#0ea5e9;width:100%;margin-top:8px" onclick="makeTable()">Generate Weekly Timetable</button>
+<div id="tableOut" style="margin-top:10px"></div>
+<button id="tableDl" style="display:none;background:white;color:black;width:100%;margin-top:8px" onclick="dlImage('tableOut','Timetable')">📥 Download Timetable Image</button>
+</div>
+
+<div class="card" style="border:1px dashed var(--pri);text-align:center">
+<button style="background:white;color:black;width:100%" onclick="resetAll()">🔄 Paste New Chapter / Reset Lab</button>
 </div>
 
 </div>
 
 <script>
-let text="";
-function enterWorld(){
-  text=document.getElementById('mainInput').value;
-  if(text.length<10){alert("Paste at least 1 paragraph first bro!");return}
-  document.getElementById('gate').style.display='none';
-  document.getElementById('world').style.display='block';
-  window.scrollTo(0,0);
+let timerInt=null, totalSec=1500, txt="";
+function activateLab(){
+ txt=document.getElementById('mainText').value.trim();
+ if(txt.length<50){alert("Paste at least 1 full paragraph!");return}
+ document.getElementById('labArea').style.display='block';
+ generateMCQ(); generateSummary();
+ window.scrollTo(0,400);
 }
-function makeFlash(){
-  let sentences=text.split('.').slice(0,4);
-  let out=document.getElementById('flashOut');out.innerHTML='';
-  sentences.forEach(s=>{
-    if(s.trim().length>10){
-      out.innerHTML+=`<div class="flash"><b>Q:</b> What is ${s.trim().substring(0,30)}...?<br><b>A:</b> ${s.trim()}</div>`;
-    }
-  });
+
+function generateMCQ(){
+ let count=parseInt(document.getElementById('mcqCount').value);
+ let sentences=txt.split('.').filter(s=>s.trim().length>15);
+ if(sentences.length<5) sentences=txt.split('\n').filter(s=>s.trim().length>15);
+ let out=document.getElementById('mcqOut'); out.innerHTML='';
+ document.getElementById('mcqBadge').innerText=count+" MCQs Generated";
+ for(let i=0;i<count;i++){
+  let s=sentences[i % sentences.length].trim();
+  let words=s.split(' ').filter(w=>w.length>3);
+  let ans=words[Math.floor(words.length/2)]||"Concept";
+  let q=s.replace(ans,"______");
+  if(q.length<10) q="What is the main concept of: "+s.substring(0,60);
+  out.innerHTML+=`<div class="mcq"><b>Q${i+1}: ${q}?</b><br><span style="color:#a5b4fc">A) ${ans}</span> &nbsp; B) ${words[0]||'None'} &nbsp; C) All of above &nbsp; D) None<br><span style="font-size:10px;color:#10b981">✔ Correct: A</span></div>`;
+ }
 }
-function humanize(){
-  let t=text.replace(/\bIn conclusion\b/g,"So finally").replace(/\bFurthermore\b/g,"Also").replace(/\bMoreover\b/g,"Plus").replace(/\bUtilize\b/g,"Use");
-  document.getElementById('humanOut').value=t + "\n\n[Humanized - No AI words]";
+
+function generateSummary(){
+ let len=parseInt(document.getElementById('sumLen').value);
+ let sents=txt.split('.').filter(s=>s.trim().length>20);
+ // simple rank by length
+ sents.sort((a,b)=>b.length-a.length);
+ let selected=sents.slice(0,len).join('. ') + '.';
+ document.getElementById('sumOut').innerText=selected;
 }
-function makeQuiz(){
-  let out=document.getElementById('quizOut');out.innerHTML='';
-  for(let i=1;i<=5;i++){
-    out.innerHTML+=`<div class="flash">Q${i}: What is main point of paragraph ${i}?<br>A) ${text.split(' ')[i]||'Concept'} B) Other C) None D) All</div>`;
-  }
+
+function setCustomTimer(){
+ let m=parseInt(document.getElementById('customMin').value);
+ if(m<1 || m>180){alert("Set 3 to 180 minutes (3 hours)");return}
+ totalSec=m*60; startTimer();
 }
-function summarize(){
-  document.getElementById('sumOut').innerText="Summary: "+text.substring(0,120)+"... [Main 3 points extracted]";
+function startTimer(){
+ clearInterval(timerInt);
+ timerInt=setInterval(()=>{
+  totalSec--; let mm=Math.floor(totalSec/60); let ss=totalSec%60;
+  document.getElementById('timerDisplay').innerText=`${mm}:${ss<10?'0':''}${ss}`;
+  if(totalSec<=0){clearInterval(timerInt); alert("Time Complete! Take break.");}
+ },1000);
 }
-function startPomo(){
-  document.getElementById('pomo').style.display='block';
-  let s=25*60; let el=document.getElementById('pomo');
-  setInterval(()=>{s--;let m=Math.floor(s/60);let sc=s%60;el.innerText=`${m}:${sc} ⏳ Don't touch phone!`;},1000);
+function stopTimer(){clearInterval(timerInt);}
+
+function makeTable(){
+ let d=[document.getElementById('sub1').value,document.getElementById('sub2').value,document.getElementById('sub3').value,document.getElementById('sub4').value];
+ let html=`<table style="width:100%;border-collapse:collapse;background:white;color:black;border-radius:10px;overflow:hidden"><tr style="background:#6366f1;color:white"><th style="padding:8px">Day</th><th>Subjects</th></tr>`;
+ let days=["Monday","Tuesday","Wednesday","Thursday"];
+ days.forEach((day,i)=>{
+  html+=`<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">${day}</td><td style="padding:8px;border:1px solid #ddd">${d[i]||'-'}</td></tr>`;
+ });
+ html+=`</table><p style="font-size:8px;color:gray;text-align:center">Generated by formatpure.github.io Students Lab PRO</p>`;
+ document.getElementById('tableOut').innerHTML=html;
+ document.getElementById('tableDl').style.display='block';
 }
+
+function downloadText(id,name){
+ let t=document.getElementById(id).innerText;
+ let blob=new Blob([t],{type:'text/plain'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click();
+}
+function dlImage(id,name){
+ html2canvas(document.getElementById(id)).then(c=>{let a=document.createElement('a');a.download=name+'.png';a.href=c.toDataURL();a.click();});
+}
+function downloadMCQ(){
+ let t=document.getElementById('mcqOut').innerText; downloadText('mcqOut','MCQs-300');
+}
+function resetAll(){document.getElementById('labArea').style.display='none'; document.getElementById('mainText').value=''; window.scrollTo(0,0);}
 </script>
 </body>
 </html>
