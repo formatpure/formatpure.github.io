@@ -69,6 +69,50 @@ function genQA(type){let sents=getSent();let n=type==='short'?100:50;let h="<ol>
 function downloadImage(){alert("Tip: On mobile, take screenshot of any section. On PC press PrintScreen. Full image export coming in V2.")}
 
 document.getElementById('imgUpload').addEventListener('change',e=>{let d=document.getElementById('imgPrev');d.innerHTML="";[...e.target.files].forEach(f=>{let r=new FileReader();r.onload=ev=>{d.innerHTML+=`<img src="${ev.target.result}" style="width:100px;margin:5px;border-radius:8px">`};r.readAsDataURL(f)});alert("Images uploaded! In PRO AI version, text will auto-extract. For now, also paste text manually.")});
+function solveMath(){
+  let q = prompt("Type maths question (e.g. 2+2, 2x+5=17, area triangle b=10 h=6):");
+  if(!q) return;
+  q = q.toLowerCase().trim();
+  let out = "";
 
-function solveMath(){document.getElementById('mathOut').innerHTML=`<div style="background:#1e1e3a;padding:15px;border-radius:8px"><b>Step 1:</b> Identify given data from question image<br><b>Step 2:</b> Write formula required<br><b>Step 3:</b> Substitute values<br><b>Step 4:</b> Solve step-by-step<br><b>Step 5:</b> Final answer with unit<br><br><i>Upload a clear image. Full AI step solver connects in backend V2.</i></div>`}
+  try{
+    // 1. Basic arithmetic 2+2, 12*5 etc.
+    if(/^[0-9+\-*/().\s^%]+$/.test(q)){
+      let expr = q.replace(/\^/g,'**');
+      let ans = Function('"use strict";return ('+expr+')')();
+      out = `<b>Q:</b> ${q}<br><b>Step 1:</b> Calculate ${expr}<br><b>Step 2: Final Answer = ${ans}</b>`;
+    }
+    // 2. Linear: 2x+5=17
+    else if(q.includes('x') && q.includes('=')){
+      let m = q.replace(/\s/g,'').match(/(\d*)x\+(\d+)=(\d+)/);
+      if(m){
+        let a=parseInt(m[1]||'1'), b=parseInt(m[2]), c=parseInt(m[3]);
+        out = `<b>Q:</b> ${q}<br>
+        Step 1: ${a}x = ${c} - ${b}<br>
+        Step 2: ${a}x = ${c-b}<br>
+        Step 3: x = ${c-b}/${a}<br>
+        <b>Final: x = ${(c-b)/a}</b>`;
+      }
+    }
+    // 3. Triangle area
+    else if(q.includes('triangle')){
+      let b = (q.match(/b\s*=\s*(\d+)/)||[])[1] || 10;
+      let h = (q.match(/h\s*=\s*(\d+)/)||[])[1] || 6;
+      out = `<b>Step 1:</b> Area = 1/2 × base × height<br>
+             <b>Step 2:</b> = 1/2 × ${b} × ${h}<br>
+             <b>Step 3:</b> = ${(b*h)/2}<br>
+             <b>Final Answer = ${(b*h)/2} cm²</b>`;
+    }
+    // 4. Circle area
+    else if(q.includes('circle')){
+      let r = (q.match(/r\s*=\s*(\d+)/)||[])[1] || 7;
+      out = `<b>Step 1:</b> Area = πr²<br><b>Step 2:</b> = 3.14 × ${r}²<br><b>Final = ${(3.14*r*r).toFixed(2)}</b>`;
+    }
+    else {
+      out = `Type like:<br>• 2+2<br>• 2x+5=17<br>• area triangle b=10 h=6<br>• area circle r=7`;
+    }
+  }catch(e){ out = "Couldn't solve. Try simpler format."; }
+
+  document.getElementById('mathOut').innerHTML = `<div style="background:#1e1e3a;padding:15px;border-radius:8px">${out}</div>`;
+}
 </script></body></html>
