@@ -76,7 +76,9 @@ document.getElementById('c-qrcode').innerHTML=`<input id="qrT" placeholder="Text
  document.getElementById('c-mindmap').innerHTML=`<input id="mmT" placeholder="Central idea"><button onclick="drawMM()">Draw Smart</button><div id="mmO" class="card" style="text-align:left"></div>`;
 document.getElementById('c-planner').innerHTML=`<input id="plD" type="date"><input id="plT" placeholder="Task"><button onclick="plL.innerHTML+='<li>'+plD.value+': '+plT.value+'</li>'">Add</button><ul id="plL"></ul>`;
 
-// FUNCTIONS
+function drawMM(){let central=document.getElementById('mmT').value||"Main Topic";let text=document.getElementById('mainText').value;let s=text.match(/[^.!?]+[.!?]+/g)||[];let pts=s.slice(0,5).map((x,i)=> (i==4||i==s.slice(0,5).length-1?'└─ ':'├─ ')+x.trim().substring(0,60));if(pts.length<3)pts=["├─ What is it?","├─ Why important?","└─ Example"];document.getElementById('mmO').innerHTML='🧠 <b>'+central+'</b><br>'+pts.join('<br>');}
+ 
+ // FUNCTIONS
 function genSum(){let s=getS();document.getElementById('sumOut').innerHTML="<p>"+s.slice(0,20).join(' ')+"</p>"}
 function genTT(){let subs=document.getElementById('tt_s').value.split(',');let h=+document.getElementById('tt_t').value.split(':')[0],m=+document.getElementById('tt_t').value.split(':')[1];let hrs=+document.getElementById('tt_h').value;let br=+document.getElementById('tt_b').value;let html="<table><tr><th>Time</th><th>Subject</th></tr>";for(let i=0;i<hrs;i++){let t1=`${h}:${String(m).padStart(2,'0')}`;m+=60;if(m>=60){h++;m-=60}let t2=`${h}:${String(m).padStart(2,'0')}`;html+=`<tr><td>${t1}-${t2}</td><td>${subs[i%subs.length]||'Study'}</td></tr>`;if(i<hrs-1)html+=`<tr style="background:#fef3c7"><td colspan=2>☕ BREAK ${br}min</td></tr>`;m+=br;if(m>=60){h++;m-=60}}document.getElementById('ttOut').innerHTML=html+"</table>"}
 let tInt;function tStart(){let s=25*60;clearInterval(tInt);tInt=setInterval(()=>{s--;let mm=Math.floor(s/60),ss=s%60;document.getElementById('tm').innerText=`${mm}:${ss}`;if(s<=0)clearInterval(tInt)},1000)}function tStop(){clearInterval(tInt)}
