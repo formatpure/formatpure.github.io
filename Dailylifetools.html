@@ -73,7 +73,7 @@ document.getElementById('c-pwd').innerHTML=`<button onclick="pwdO.innerText=Math
 document.getElementById('c-tts').innerHTML=`<button onclick="speechSynthesis.speak(new utterancespeech())">Placeholder</button><button onclick="speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById('mainText').value.slice(0,200)))">🔊 Read Text</button>`;
 document.getElementById('c-formula').innerHTML=`<div class="card">a²+b²=c²<br>Speed=Distance/Time<br>% = part/whole×100</div>`;
 document.getElementById('c-qrcode').innerHTML=`<input id="qrT" placeholder="Text"><button onclick="qrO.innerText='QR: '+qrT.value+' (use online lib for real QR)'">Make</button><div id="qrO"></div>`;
-document.getElementById('c-mindmap').innerHTML=`<input id="mmT" placeholder="Central idea"><button onclick="mmO.innerHTML='🧠 '+mmT.value+'<br>├─ Point 1<br>├─ Point 2<br>└─ Point 3'">Draw</button><div id="mmO" class="card"></div>`;
+ document.getElementById('c-mindmap').innerHTML=`<input id="mmT" placeholder="Central idea"><button onclick="drawMM()">Draw Smart</button><div id="mmO" class="card" style="text-align:left"></div>`;
 document.getElementById('c-planner').innerHTML=`<input id="plD" type="date"><input id="plT" placeholder="Task"><button onclick="plL.innerHTML+='<li>'+plD.value+': '+plT.value+'</li>'">Add</button><ul id="plL"></ul>`;
 
 // FUNCTIONS
