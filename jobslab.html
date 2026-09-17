@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobs Lab - Salary Slip + Resume Maker | ProLab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+body{background:#020617;color:white;font-family:sans-serif;padding:15px}
+input,textarea{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:1px solid #334155;background:#0f172a;color:white}
+button{padding:13px;width:100%;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
+.tab{display:flex;gap:8px;margin-bottom:12px}
+.tab button{flex:1}
+.active{background:#7c3aed;color:white}
+.inactive{background:#1e293b;color:#94a3b8}
+.card{background:white;color:black;padding:20px;border-radius:12px;margin-top:15px;display:none}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">💼 Jobs Lab</h2>
+<div class="tab">
+<button id="t1" class="active" onclick="show(1)">💰 Salary Slip</button>
+<button id="t2" class="inactive" onclick="show(2)">📄 Resume Maker</button>
+</div>
+
+<!-- SALARY SLIP -->
+<div id="box1">
+<input id="sComp" placeholder="Company: FormatPure Ltd">
+<input id="sEmp" placeholder="Employee: Ahmed Ali / Rahul">
+<input id="sId" placeholder="ID: FP-001">
+<input id="sMonth" placeholder="Month: Sept 2026">
+<input id="sBasic" type="number" placeholder="Basic: 50000">
+<input id="sAllow" type="number" placeholder="Allowances: 10000">
+<input id="sTxn" placeholder="Bank Txn ID: PK123456">
+<button style="background:#f59e0b;color:black;margin-top:8px" onclick="makeSlip()">Generate Slip</button>
+
+<div id="slip" class="card">
+<h3 style="text-align:center;margin:0" id="oSComp"></h3>
+<p style="text-align:center;font-size:11px;color:gray">SALARY SLIP - <span id="oSMonth"></span></p><hr>
+<p style="font-size:12px">Emp: <b id="oSEmp"></b> | ID: <span id="oSId"></span></p>
+<p style="font-size:12px">Basic: Rs.<span id="oSBasic"></span> + Allow Rs.<span id="oSAllow"></span></p>
+<h2 style="text-align:right;color:#7c3aed">Total: Rs.<span id="oSTotal"></span></h2>
+<p style="font-size:11px">Bank Ref: <span id="oSTxn"></span> - Credited</p>
+<p style="font-size:8px;color:gray;text-align:center">Sample Format Only | formatpure.github.io</p>
+</div>
+<button id="sDl" style="display:none;background:#10b981;margin-top:10px" onclick="dl('slip','salary-slip')">Download Slip</button>
+</div>
+
+<!-- RESUME -->
+<div id="box2" style="display:none">
+<input id="rName" placeholder="Full Name: Ahmed Ali">
+<input id="rPost" placeholder="Apply For: Web Developer">
+<input id="rPhone" placeholder="Phone: 03XX-XXXXXXX">
+<textarea id="rSkills" placeholder="Skills: HTML, CSS, JS, React"></textarea>
+<textarea id="rEdu" placeholder="Education: BS Computer - UET 2022"></textarea>
+<button style="background:#0ea5e9;margin-top:8px" onclick="makeResume()">Generate Resume</button>
+
+<div id="resume" class="card">
+<h2 style="margin:0;color:#0ea5e9" id="oRName"></h2>
+<p style="margin:2px 0;font-size:13px;color:#334155" id="oRPost"></p>
+<p style="font-size:11px" id="oRPhone"></p><hr>
+<p style="font-size:12px"><b>Skills:</b> <span id="oRSkills"></span></p>
+<p style="font-size:12px"><b>Education:</b> <span id="oREdu"></span></p>
+<p style="font-size:8px;color:gray;text-align:center;margin-top:15px">Resume by formatpure.github.io JobsLab</p>
+</div>
+<button id="rDl" style="display:none;background:#10b981;margin-top:10px" onclick="dl('resume','resume')">Download Resume</button>
+</div>
+
+<script>
+function show(n){
+  document.getElementById('box1').style.display=n==1?'block':'none';
+  document.getElementById('box2').style.display=n==2?'block':'none';
+  document.getElementById('t1').className=n==1?'active':'inactive';
+  document.getElementById('t2').className=n==2?'active':'inactive';
+}
+function makeSlip(){
+  document.getElementById('slip').style.display='block';document.getElementById('sDl').style.display='block';
+  document.getElementById('oSComp').innerText=document.getElementById('sComp').value;
+  document.getElementById('oSEmp').innerText=document.getElementById('sEmp').value;
+  document.getElementById('oSId').innerText=document.getElementById('sId').value;
+  document.getElementById('oSMonth').innerText=document.getElementById('sMonth').value;
+  let b=Number(document.getElementById('sBasic').value)||0,a=Number(document.getElementById('sAllow').value)||0;
+  document.getElementById('oSBasic').innerText=b;document.getElementById('oSAllow').innerText=a;
+  document.getElementById('oSTotal').innerText=b+a;
+  document.getElementById('oSTxn').innerText=document.getElementById('sTxn').value;
+}
+function makeResume(){
+  document.getElementById('resume').style.display='block';document.getElementById('rDl').style.display='block';
+  document.getElementById('oRName').innerText=document.getElementById('rName').value;
+  document.getElementById('oRPost').innerText=document.getElementById('rPost').value;
+  document.getElementById('oRPhone').innerText=document.getElementById('rPhone').value;
+  document.getElementById('oRSkills').innerText=document.getElementById('rSkills').value;
+  document.getElementById('oREdu').innerText=document.getElementById('rEdu').value;
+}
+function dl(id,name){
+  html2canvas(document.getElementById(id)).then(c=>{
+    let a=document.createElement('a');a.download=name+'.png';a.href=c.toDataURL();a.click();
+  });
+}
+</script>
+</body>
+</html>
