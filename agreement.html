@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agreement Generator | ProLab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+body{background:#020617;color:white;font-family:sans-serif;padding:15px}
+input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #334155}
+button{background:#dc2626;color:white;padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold}
+#agBox{background:white;color:black;padding:25px;border-radius:12px;margin-top:20px;display:none;line-height:1.7;font-size:13px}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">📜 Agreement Maker</h2>
+<p style="text-align:center;font-size:11px;color:#94a3b8">Sample Template Only - Not Legal Advice</p>
+
+<input id="p1" placeholder="Party 1: Ahmed Ali (Company)">
+<input id="p2" placeholder="Party 2: Bilal Khan (Client)">
+<input id="purpose" placeholder="Purpose: Website Development Project">
+<input id="amt" placeholder="Amount: Rs. 100,000">
+<input id="days" placeholder="Duration: 30 Days">
+<textarea id="terms" placeholder="Terms: 50% advance, 50% after completion..."></textarea>
+
+<button onclick="makeAg()">Generate Agreement</button>
+
+<div id="agBox">
+  <h3 style="text-align:center">SERVICE AGREEMENT</h3>
+  <p style="text-align:center;font-size:10px;color:gray">SAMPLE TEMPLATE FOR REFERENCE ONLY</p>
+  <hr>
+  <p>This Agreement is made between <b id="oP1"></b> (First Party) and <b id="oP2"></b> (Second Party).</p>
+  <p><b>1. Purpose:</b> <span id="oPur"></span></p>
+  <p><b>2. Total Amount:</b> Rs. <span id="oAmt"></span></p>
+  <p><b>3. Duration:</b> <span id="oDays"></span></p>
+  <p><b>4. Terms:</b> <span id="oTerms"></span></p>
+  <p><b>5.</b> Both parties agree to fulfill their responsibilities.</p>
+  <br>
+  <div style="display:flex;justify-content:space-between;margin-top:20px">
+    <div>Party 1 Sign<br><br>__________</div>
+    <div>Party 2 Sign<br><br>__________</div>
+  </div>
+  <p style="font-size:9px;color:gray;text-align:center;margin-top:20px">Generated via formatpure.github.io | This is a sample format, please consult lawyer for final legal use</p>
+</div>
+
+<button id="dl" style="display:none;background:#10b981;margin-top:10px" onclick="dlAg()">Download Agreement</button>
+
+<script>
+function makeAg(){
+  document.getElementById('agBox').style.display='block';
+  document.getElementById('dl').style.display='block';
+  document.getElementById('oP1').innerText=document.getElementById('p1').value;
+  document.getElementById('oP2').innerText=document.getElementById('p2').value;
+  document.getElementById('oPur').innerText=document.getElementById('purpose').value;
+  document.getElementById('oAmt').innerText=document.getElementById('amt').value;
+  document.getElementById('oDays').innerText=document.getElementById('days').value;
+  document.getElementById('oTerms').innerText=document.getElementById('terms').value;
+  document.getElementById('agBox').scrollIntoView({behavior:'smooth'});
+}
+function dlAg(){
+  html2canvas(document.getElementById('agBox')).then(c=>{
+    let a=document.createElement('a');a.download='agreement.png';a.href=c.toDataURL();a.click();
+  });
+}
+</script>
+</body>
+</html>
