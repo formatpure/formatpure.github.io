@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offer Letter Generator | ProLab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+body{background:#020617;color:white;font-family:sans-serif;padding:15px}
+input{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #334155}
+button{background:#0ea5e9;color:white;padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold}
+#letter{background:white;color:black;padding:25px;border-radius:12px;margin-top:20px;display:none;line-height:1.6}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">💼 Offer Letter Maker</h2>
+
+<input id="cName" placeholder="Company: FormatPure Pvt Ltd">
+<input id="eName" placeholder="Employee Name: Ali Ahmed">
+<input id="ePost" placeholder="Position: Web Developer">
+<input id="eSalary" placeholder="Salary: 80,000">
+<input id="eDate" placeholder="Joining Date: 1 Oct 2026">
+
+<button onclick="makeLetter()">Generate Offer Letter</button>
+
+<div id="letter">
+  <h3 style="text-align:center;margin:0" id="oComp"></h3>
+  <p style="text-align:center;font-size:11px;color:gray">OFFER LETTER</p>
+  <hr>
+  <p>Dear <b id="oEmp"></b>,</p>
+  <p>We are pleased to offer you the position of <b id="oPost"></b> at <span id="oComp2"></span>.</p>
+  <p>Your monthly salary will be <b>Rs. <span id="oSal"></span></b> and your joining date is <b id="oDate"></b>.</p>
+  <p>Please confirm your acceptance.</p>
+  <br>
+  <p>Regards,<br>HR Manager<br><span id="oComp3"></span></p>
+  <p style="font-size:9px;color:gray;text-align:center;margin-top:20px">Generated via formatpure.github.io - This is a sample template</p>
+</div>
+
+<button id="dl" style="display:none;background:#10b981;margin-top:10px" onclick="dlLetter()">Download Letter</button>
+
+<script>
+function makeLetter(){
+  document.getElementById('letter').style.display='block';
+  document.getElementById('dl').style.display='block';
+  let cn=document.getElementById('cName').value;
+  document.getElementById('oComp').innerText=cn;
+  document.getElementById('oComp2').innerText=cn;
+  document.getElementById('oComp3').innerText=cn;
+  document.getElementById('oEmp').innerText=document.getElementById('eName').value;
+  document.getElementById('oPost').innerText=document.getElementById('ePost').value;
+  document.getElementById('oSal').innerText=document.getElementById('eSalary').value;
+  document.getElementById('oDate').innerText=document.getElementById('eDate').value;
+  document.getElementById('letter').scrollIntoView({behavior:'smooth'});
+}
+function dlLetter(){
+  html2canvas(document.getElementById('letter')).then(c=>{
+    let a=document.createElement('a');a.download='offer-letter.png';a.href=c.toDataURL();a.click();
+  });
+}
+</script>
+</body>
+</html>
