@@ -35,7 +35,17 @@ else b.innerHTML=`<textarea id="a" rows="5" placeholder="Input for ${n}"></texta
 function dCounter(){let v=document.getElementById('a').value;let w=v.trim().split(/\s+/).filter(x=>x).length;document.getElementById('o').innerHTML=`Words: ${w}<br>Chars: ${v.length}<br>Reading: ${Math.ceil(w/200)} min`}
 function dBmi(){let h=document.getElementById('h').value/100,w=document.getElementById('w').value;let b=(w/(h*h)).toFixed(1);document.getElementById('o').innerHTML=`BMI: ${b}`}
 function dEmi(){let p=+document.getElementById('p').value,r=+document.getElementById('r').value/1200,n=+document.getElementById('n').value;let e=p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);document.getElementById('o').innerHTML=`Monthly EMI: ${e.toFixed(0)}`}
-function dGpa(){let a=document.getElementById('a').value.split(',').map(x=>+x);let avg=a.reduce((x,y)=>x+y,0)/a.length;document.getElementById('o').innerHTML=`Average: ${avg.toFixed(1)}% Grade: ${avg>=90?'A+':avg>=80?'A':avg>=70?'B':'C'}`}
+function dGpa(){
+  let v=document.getElementById('a').value;
+  if(v.includes('/')){
+    let parts=v.split('/');
+    let avg=(parseFloat(parts[0])/parseFloat(parts[1])*100);
+    document.getElementById('o').innerHTML=`Percentage: ${avg.toFixed(1)}% Grade: ${avg>=90?'A+':avg>=80?'A':avg>=70?'B':'C'}`;
+  } else {
+    let a=v.split(',').map(x=>+x);let avg=a.reduce((x,y)=>x+y,0)/a.length;
+    document.getElementById('o').innerHTML=`Average: ${avg.toFixed(1)}% Grade: ${avg>=90?'A+':avg>=80?'A':avg>=70?'B':'C'}`;
+  }
+}
 function dPass(){let c="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz123456789!@#";let p="";for(let i=0;i<12;i++)p+=c[Math.floor(Math.random()*c.length)];document.getElementById('o').innerHTML=`<b>${p}</b>`}
 function dCalc(){let a=+document.getElementById('a').value,b=+document.getElementById('b').value;document.getElementById('o').innerHTML=`Add: ${a+b}<br>Sub: ${a-b}<br>Mul: ${a*b}<br>Div: ${b? (a/b).toFixed(2):0}`}
 function dTimer(){let s=+document.getElementById('a').value;let o=document.getElementById('o');let i=setInterval(()=>{o.innerHTML=s+' sec';s--;if(s<0){clearInterval(i);o.innerHTML='Done!'}},1000)}
