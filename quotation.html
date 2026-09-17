@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quotation Generator | ProLab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+body{background:#020617;color:white;font-family:sans-serif;padding:15px}
+input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #334155}
+button{background:#7c3aed;color:white;padding:14px;width:100%;border:none;border-radius:10px;font-weight:bold}
+#quoteCard{background:white;color:black;padding:20px;border-radius:14px;margin-top:20px;display:none}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">📋 Pro Quotation Maker</h2>
+
+<input id="qBiz" placeholder="Your Company: FormatPure">
+<input id="qClient" placeholder="Client Company: BuildTech Pvt Ltd">
+<textarea id="qItems" placeholder="Items: 1. Website Design - 30k&#10;2. Hosting - 5k"></textarea>
+<input id="qTotal" placeholder="Total: 35000" type="number">
+<input id="qValid" placeholder="Valid Till: 30 Sept 2026">
+
+<button onclick="makeQuote()">Generate Quotation</button>
+
+<div id="quoteCard">
+  <div style="display:flex;justify-content:space-between">
+    <b id="oBiz" style="color:#7c3aed"></b>
+    <span style="background:#7c3aed;color:white;padding:4px 8px;border-radius:6px;font-size:12px">QUOTATION</span>
+  </div>
+  <p style="font-size:12px">To: <b id="oClient"></b></p>
+  <pre id="oItems" style="background:#f1f5f9;padding:10px;border-radius:8px;white-space:pre-wrap;font-family:sans-serif;font-size:13px"></pre>
+  <h2 style="text-align:right;color:#7c3aed">Rs. <span id="oTotal"></span></h2>
+  <p style="font-size:11px;color:gray">Valid Till: <span id="oValid"></span></p>
+  <p style="font-size:10px;color:gray;text-align:center;margin-top:10px">Generated via formatpure.github.io - ProLab</p>
+</div>
+
+<button id="qDl" style="display:none;background:#10b981;margin-top:10px" onclick="dlQuote()">Download Quotation Image</button>
+
+<script>
+function makeQuote(){
+  document.getElementById('quoteCard').style.display='block';
+  document.getElementById('qDl').style.display='block';
+  document.getElementById('oBiz').innerText=document.getElementById('qBiz').value;
+  document.getElementById('oClient').innerText=document.getElementById('qClient').value;
+  document.getElementById('oItems').innerText=document.getElementById('qItems').value;
+  document.getElementById('oTotal').innerText=document.getElementById('qTotal').value;
+  document.getElementById('oValid').innerText=document.getElementById('qValid').value;
+  document.getElementById('quoteCard').scrollIntoView({behavior:'smooth'});
+}
+function dlQuote(){
+  html2canvas(document.getElementById('quoteCard')).then(c=>{
+    let a=document.createElement('a');a.download='quotation.png';a.href=c.toDataURL();a.click();
+  });
+}
+</script>
+</body>
+</html>
